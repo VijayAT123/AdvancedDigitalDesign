@@ -1,0 +1,35 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/acct/vijayt/Documents/611/Lab2/2021F_lab_hex
+vhexdriver
+DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+!s110 1632772201
+!i10b 1
+!s100 SXPE_0dkgLjZMdPV2T]dB2
+!s11b Dg1SIo80bB@j0V0VzS_@n1
+IC_=G@=BzjTMU`[_zk<<CV1
+VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+w1632347733
+8hexdriver.sv
+Fhexdriver.sv
+!i122 6
+L0 1 18
+OL;L;2020.1;71
+r1
+!s85 0
+31
+!s108 1632772201.000000
+!s107 top.sv|simtop.sv|hexdriver.sv|
+!s90 -pedanticerrors|-lint|-hazards|-source|-stats=all|hexdriver.sv|simtop.sv|top.sv|
+!i113 0
+o-pedanticerrors -lint -hazards -source -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+tCvgOpt 0

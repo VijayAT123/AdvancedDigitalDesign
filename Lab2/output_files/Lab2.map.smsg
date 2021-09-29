@@ -1,0 +1,4 @@
+Info (10281): Verilog HDL Declaration information at top.sv(24): object "HEX0" differs only in case from object "hex0" in the same scope File: /acct/vijayt/Documents/611/Lab2/2021F_lab_hex/top.sv Line: 24
+Info (10281): Verilog HDL Declaration information at top.sv(25): object "HEX1" differs only in case from object "hex1" in the same scope File: /acct/vijayt/Documents/611/Lab2/2021F_lab_hex/top.sv Line: 25
+Info (10281): Verilog HDL Declaration information at top.sv(26): object "HEX2" differs only in case from object "hex2" in the same scope File: /acct/vijayt/Documents/611/Lab2/2021F_lab_hex/top.sv Line: 26
+Info (10281): Verilog HDL Declaration information at top.sv(27): object "HEX3" differs only in case from object "hex3" in the same scope File: /acct/vijayt/Documents/611/Lab2/2021F_lab_hex/top.sv Line: 27
