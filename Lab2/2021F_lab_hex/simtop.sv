@@ -42,6 +42,10 @@ module simtop;
 	initial begin
 		clk = 0;
 		counter = 16'b0;
+		SW <= 18'b1; //initializes all switches to off
+		if(HEX0 !== 7'b1000000) begin //automatic test case; all switches off so all displays should show 0
+			$error("HEX0 should display a 0 (7'b1000000)");
+		end
 	end
 
 	//on a board, this explicitly says combinational logic instead of clocked
@@ -56,18 +60,14 @@ module simtop;
 	end
 
 	always @(negedge clk) begin
-		for (int i = 0; i < 16; i++) begin
-			if (i == 0) begin //HEX0 should display 7'b1000000 for 0
-				if(HEX0 != 7'b1000000) begin
-					$display("HEX0 should display a 0 (7'b1000000)");
-				end
-			end else if ((i != 0) && (i != 15)) begin  // HEX0 only on for counter = 0 and counter = 15
+		for (int i = 0; i <= 15; i++) begin
+			if ((i !== 0) && (i !== 15)) begin  // HEX0 only on for counter = 0 and counter = 15
 				if(HEX0 != 7'b1111111) begin
-					$display("HEX0 should have all segs turned off for values 1-14");
+					$error("HEX0 should have all segs turned off for values 1-14");
 				end
 			end else if (i == 15) begin //switches 0-3 turned on; HEX0 should display a 1
 				if(HEX0 != 7'b1111001) begin
-					$display("HEX0 should display a 1 (7'b1111001)");
+					$error("HEX0 should display a 1 (7'b1111001)");
 				end
 			end
 		end

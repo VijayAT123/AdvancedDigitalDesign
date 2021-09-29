@@ -37,13 +37,13 @@ module top (
 	hexdriver hex3(.val(SW[15:12]), .HEX(HEX3[6:0])); //switches 12-15 controlling hex3
 	 //last 2 switches controlling hex4
 	//switches 16 and 17 exception
-	always @ (*) begin
+	always comb begin
 		if (SW[17:16] == 2'b11) begin //if switches 16 and 17 both turned on
-			assign HEX4 = 7'b1111001; //dipslay a 1 on HEX4
+			HEX4 = 7'b1111001; //dipslay a 1 on HEX4
 		end else if (SW[17:16] == 2'b0) begin//if switches 16 and 17 both turned off
-			assign HEX4 = 7'b1000000; //display a 0 on HEX4
+			HEX4 = 7'b1000000; //display a 0 on HEX4
 		end else begin 
-			assign HEX4 = 7'b1111111; //turn off all segments on HEX4 if not all switches on/off
+			HEX4 = 7'b1111111; //turn off all segments on HEX4 if not all switches on/off
 		end
 	end
 	
