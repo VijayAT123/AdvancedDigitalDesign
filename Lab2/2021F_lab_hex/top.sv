@@ -35,21 +35,26 @@ module top (
 	hexdriver hex1(.val(SW[7:4]), .HEX(HEX1[6:0])); //switches 4-7 controlling hex1
 	hexdriver hex2(.val(SW[11:8]), .HEX(HEX2[6:0])); //switches 8-11 controlling hex2
 	hexdriver hex3(.val(SW[15:12]), .HEX(HEX3[6:0])); //switches 12-15 controlling hex3
-	 //last 2 switches controlling hex4
+	//last 2 switches controlling hex4
 	//switches 16 and 17 exception
-	always comb begin
-		if (SW[17:16] == 2'b11) begin //if switches 16 and 17 both turned on
-			HEX4 = 7'b1111001; //dipslay a 1 on HEX4
-		end else if (SW[17:16] == 2'b0) begin//if switches 16 and 17 both turned off
-			HEX4 = 7'b1000000; //display a 0 on HEX4
-		end else begin 
-			HEX4 = 7'b1111111; //turn off all segments on HEX4 if not all switches on/off
-		end
-	end
-	
-	assign HEX5 = 7'b1000000; //diplay a 0
-	assign HEX6 = 7'b1000000; //diplay a 0
-	assign HEX7 = 7'b1000000; //diplay a 0
+	//correct for simplicity
+	hexdriver hex4(.val({SW[17:16]}, SW[17:16]}), .HEX(HEX4[6:0])); //concatenates 2 binary 0s w SW[17:16] values; 4 bit binary
+	//works
+	// always_comb begin
+	// 	if (SW[17:16] == 2'b11) begin //if switches 16 and 17 both turned on
+	// 		assign HEX4 <= 7'b1111001; //dipslay a 1 on HEX4
+	// 	end else if (SW[17:16] == 2'b0) begin//if switches 16 and 17 both turned off
+	// 		assign HEX4 = 7'b1000000; //display a 0 on HEX4
+	// 	end else begin 
+	// 		assign HEX4 = 7'b1111111; //turn off all segments on HEX4 if not all switches on/off
+	// 	end
+	// end
+	hexdriver hex5(.val(4'b0), .HEX(HEX5[6:0]));
+	//assign HEX5 = 7'b1000000; //diplay a 0
+	hexdriver hex6(.val(4'b0), .HEX(HEX6[6:0]));
+	//assign HEX6 = 7'b1000000; //diplay a 0
+	hexdriver hex7(.val(4'b0), .HEX(HEX7[6:0]));
+	//assign HEX7 = 7'b1000000; //diplay a 0
 	
 	
 //=======================================================
