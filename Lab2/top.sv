@@ -38,7 +38,7 @@ module top (
 	//last 2 switches controlling hex4
 	//switches 16 and 17 exception
 	//correct for simplicity
-	hexdriver hex4(.val({SW[17:16], SW[17:16]}), .HEX(HEX4[6:0])); //concatenates 2 binary 0s w SW[17:16] values; 4 bit binary
+	hexdriver hex4(.val({SW[17:16]}, SW[17:16]}), .HEX(HEX4[6:0])); //concatenates 2 binary 0s w SW[17:16] values; 4 bit binary
 	//works
 	// always_comb begin
 	// 	if (SW[17:16] == 2'b11) begin //if switches 16 and 17 both turned on

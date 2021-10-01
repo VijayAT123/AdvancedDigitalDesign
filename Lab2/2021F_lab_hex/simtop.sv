@@ -60,7 +60,7 @@ module simtop;
 	end
 
 	always @(negedge clk) begin
-		for (int i = 0; i <= 15; i++) begin
+		for (int i = 0; i < 16; i++) begin
 			if ((i !== 0) && (i !== 15)) begin  // HEX0 only on for counter = 0 and counter = 15
 				if(HEX0 != 7'b1111111) begin
 					$error("HEX0 should have all segs turned off for values 1-14");
