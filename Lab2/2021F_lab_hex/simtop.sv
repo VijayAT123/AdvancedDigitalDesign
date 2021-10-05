@@ -37,8 +37,7 @@ module simtop;
 		.HEX7(HEX7)
 	);
 
-// your code here
-	
+	//one time initial conditions	
 	initial begin
 		clk = 0;
 		counter = 16'b0;
@@ -48,21 +47,29 @@ module simtop;
 		end
 	end
 
-	//on a board, this explicitly says combinational logic instead of clocked
+	//no sensitivity list (posedge/negedge clk/reset); continuoulsy triggers
+	//not synthesizable, only in simulation
 	always begin 
 		//clk has a period of 10 sim time units
 		clk = 1; #10; clk = 0; #10; //delay for 10 time units; defines minimum granularity of sim
+		//time delay not allowed on hardware
 	end
 
+	/*always @ (posedge clk) begin 
+		counter <= counter + 16'b1; //<= is non blocking assignment (used for sequential logic)
+		//use non blocking (<=) for sequential, blocking (=) for combinational
+	*/
 	always @(negedge clk) begin
 		for (int i = 0; i < 16; i++) begin
 			$display("counter=%x\n", i);
+			// ===, !==, etc. is == for nonsynthesizable testbenches
+			//allows for X and Z comparison for logic data types
 			if ((i !== 0) && (i !== 15)) begin  // HEX0 only on for counter = 0 and counter = 15
-				if(HEX0 != 7'b1111111) begin
+				if(HEX0 !=+ 7'b1111111) begin
 					$error("Value: %d HEX0 should have all segs turned off for values 1-14", i);
 				end
 			end else if (i == 15) begin //switches 0-3 turned on; HEX0 should display a 1
-				if(HEX0 != 7'b1111001) begin
+				if(HEX0 !== 7'b1111001) begin
 					$error("HEX0 should display a 1 (7'b1111001) for test case %d", i);
 				end
 			end
