@@ -61,46 +61,56 @@ module simtop;
 		//use non blocking (<=) for sequential, blocking (=) for combinational
 	*/
 	always @(posedge clk) begin
-		SW = 18'b1;
+		SW <= 18'b1;
 		if (HEX0 !== 7'b11111001) //1 for 1st group of SWs
 			$error ("HEX0 should display a 1 (7'b11111001)");
-		
-		SW = 18'b1111; //15 for 1st group of SWs
+		#10;
+
+		SW <= 18'b1111; //15 for 1st group of SWs
 		if(HEX0 != 7'b0001110)
 			$error("HEX0 should display F (7'b0001110)");
+		#10;
 		
-		SW = 18'b01010000; //5 for 2nd group of SWs
+		SW <= 18'b01010000; //5 for 2nd group of SWs
 		if(HEX1 != 7'b0010010)
 			$error("HEX1 should display a 5 (7'b0010010)");
+		#10;
 		
-		SW = 18'b11000000; //C for 2nd group of SWs
+		SW <= 18'b11000000; //C for 2nd group of SWs
 		if(HEX1 != 7'b1000110)
 			$error("HEX1 should display a C (7'b1000110)");
-
-		SW = 18'b110100000000; //D for 3rd group of SWs
+		#10;
+		
+		SW <= 18'b110100000000; //D for 3rd group of SWs
 		if(HEX2 != 7'b0100100)
 			$error("HEX2 should display a 2 (7'b0100100");
-
-		SW = 18'b010000000000; //4 for 3rd group of SWs
+		#10;
+		
+		SW <= 18'b010000000000; //4 for 3rd group of SWs
 		if(HEX2 != 7'b0011001)
 			$error("HEX2 should display a 4 (7'b0011001)");
-
-		SW = 18'b1000000000000000; //8 for 4th group of SWs
+		#10;
+		
+		SW <= 18'b1000000000000000; //8 for 4th group of SWs
 		if(HEX3 != 7'b0)
 			$error("HEX3 should display a 8 (7'b0000000");
-
+		#10;
+		
 		SW = 18'b1010000000000000; //A for 4th group of SWs
 		if(HEX3 != 7'b0001000)
 			$error("HEX3 should display a A (7'b0001000");
-
-		SW = 18'b00110000000000000000; //3 for 5th group of SWs
+		#10;
+		
+		SW <= 18'b00110000000000000000; //3 for 5th group of SWs
 		if(HEX4 != 7'b0110000)
 			$error("HEX4 should display a 3 (7'b0110000)");
+		#10;
 		
-		SW = 18'001000000000000000000; //2 for 5th group of SWs
+		SW <= 18'b01000000000000000000; //2 for 5th group of SWs
 		if(HEX4 != 7'b0100100)
 			$error("HEX4 should display a 2 (7'b0100100");
-
+		#10;
+		
 	end
 endmodule
 
