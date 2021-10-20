@@ -12,4 +12,4 @@ module control_unit (
 
     output  []
     
-)
+);

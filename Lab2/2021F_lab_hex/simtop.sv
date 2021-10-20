@@ -3,7 +3,7 @@
 /* Top-level module for CSCE611 RISC-V CPU, for running under simulation.  In
  * this case, the I/Os and clock are driven by the simulator. */
 
-module simtop;
+module simtop();
 
 	logic clk; //defaulted to 1 bit 
 	logic [6:0] HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7;
