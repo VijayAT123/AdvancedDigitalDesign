@@ -7,7 +7,7 @@ module hexdriver (input [3:0] val, output logic [6:0] HEX);
 			HEX = 7'b1000000; //all segments except segment 6, diplays a 0
 		else if (val == 4'b1) //if first switch on
 			HEX = 7'b1111001; // all segments turned off except 1 and 2 (HEXs in active low); displays a 1
-		else if (val == 4'b0010) //if second switch on
+		else if (val == 4'b0010) //if second switch on; 2
 			HEX = 7'b0100100;
 		else if (val == 4'b0011) //if first 2 switches on; 3
 			HEX = 7'b0110000;
