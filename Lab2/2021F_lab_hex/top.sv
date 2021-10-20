@@ -37,11 +37,8 @@ module top (
 	hexdriver hex3(.val(SW[15:12]), .HEX(HEX3[6:0])); //switches 12-15 controlling hex3
 	hexdriver hex4(.val({2'b00, SW[17:16]}), .HEX(HEX4[6:0])); //concatenates 2 binary 0s w SW[17:16] values; 4 bit binary
 	hexdriver hex5(.val(4'b0), .HEX(HEX5[6:0]));
-	//assign HEX5 = 7'b1000000; //diplay a 0
 	hexdriver hex6(.val(4'b0), .HEX(HEX6[6:0]));
-	//assign HEX6 = 7'b1000000; //diplay a 0
 	hexdriver hex7(.val(4'b0), .HEX(HEX7[6:0]));
-	//assign HEX7 = 7'b1000000; //diplay a 0
 	
 	
 //=======================================================
