@@ -40,10 +40,11 @@ module simtop;
 	//one time initial conditions	
 	initial begin
 		clk = 0;
-		counter = 16'b0;
-		SW <= 18'b1; //initializes all switches to off
-		if(HEX0 !== 7'b1000000) begin //automatic test case; all switches off so all displays should show 0
-			$error("HEX0 should display a 0 (7'b1000000)");
+		SW <= 18'b000000000000000000; //initializes all switches to off
+		if((HEX0 !== 7'b1000000) || (HEX1 !== 7'b1000000) || (HEX2 !== 7'b1000000) 
+		|| (HEX3 !== 7'b1000000) || (HEX4 !== 7'b1000000) || (HEX5 !== 7'b1000000)
+		|| (HEX6 !== 7'b1000000) || (HEX7 !== 7'b1000000)) begin //automatic test case; all switches off so all displays should show 0
+			$error("All 7 segs should display a 0 (7'b1000000)");
 		end
 	end
 
@@ -59,48 +60,47 @@ module simtop;
 		counter <= counter + 16'b1; //<= is non blocking assignment (used for sequential logic)
 		//use non blocking (<=) for sequential, blocking (=) for combinational
 	*/
-	always @(negedge clk) begin
-		for (int i = 0; i < 16; i++) begin
-			$display("counter=%x\n", i);
-			// ===, !==, etc. is == for nonsynthesizable testbenches
-			//allows for X and Z comparison for logic data types
-			if ((i !== 0) && (i !== 15)) begin  // HEX0 only on for counter = 0 and counter = 15
-				if(HEX0 !=+ 7'b1111111) begin
-					$error("Value: %d HEX0 should have all segs turned off for values 1-14", i);
-				end
-			end else if (i == 15) begin //switches 0-3 turned on; HEX0 should display a 1
-				if(HEX0 !== 7'b1111001) begin
-					$error("HEX0 should display a 1 (7'b1111001) for test case %d", i);
-				end
-			end
-		end
-	end
+	always @(posedge clk) begin
+		SW = 18'b1;
+		if (HEX0 !== 7'b11111001) //1 for 1st group of SWs
+			$error ("HEX0 should display a 1 (7'b11111001)");
 		
-		/*
-		if(counter == 16'b11110000) //switches 4-7 turned on; HEX1 should be 7'b1111001
-if(counter == 16'd0) begin //all switches turned off, all hexes should be 7'b1000000
-			if(HEX0 == 7'b1111001) //correct case
-				$display("HEX0 correctly shows a 0 for test case 0");
-			end
-		end else if(counter == 16'd1) begin
-			if(HEX0 != 7'b1111111) begin
-				$display("HEX0 should have all segs turned off");
-				num_errors = num_errors + 16'd1;
-			end
-		end else if(counter == 16'd2) begin
-				$display("HEX0 should have all segs turned off");
-				num_errors = num_errors + 16'd1;
-			end
-		end else if(counter == 16'd3) begin
-				$display("HEX0 should have all segs turned off");
-				num_errors = num_errors + 16'd1;
-			end
-		end else if(counter == 16'd4) begin
-			if(HEX0 != 7'b1111111) begin
-				$display("HEX0 should have all segs turned off");
-				num_errors = num_errors + 16'd1;
-			end	
-*/
+		SW = 18'b1111; //15 for 1st group of SWs
+		if(HEX0 != 7'b0001110)
+			$error("HEX0 should display F (7'b0001110)");
+		
+		SW = 18'b01010000; //5 for 2nd group of SWs
+		if(HEX1 != 7'b0010010)
+			$error("HEX1 should display a 5 (7'b0010010)");
+		
+		SW = 18'b11000000; //C for 2nd group of SWs
+		if(HEX1 != 7'b1000110)
+			$error("HEX1 should display a C (7'b1000110)");
 
+		SW = 18'b110100000000; //D for 3rd group of SWs
+		if(HEX2 != 7'b0100100)
+			$error("HEX2 should display a 2 (7'b0100100");
+
+		SW = 18'b010000000000; //4 for 3rd group of SWs
+		if(HEX2 != 7'b0011001)
+			$error("HEX2 should display a 4 (7'b0011001)");
+
+		SW = 18'b1000000000000000; //8 for 4th group of SWs
+		if(HEX3 != 7'b0)
+			$error("HEX3 should display a 8 (7'b0000000");
+
+		SW = 18'b1010000000000000; //A for 4th group of SWs
+		if(HEX3 != 7'b0001000)
+			$error("HEX3 should display a A (7'b0001000");
+
+		SW = 18'b00110000000000000000; //3 for 5th group of SWs
+		if(HEX4 != 7'b0110000)
+			$error("HEX4 should display a 3 (7'b0110000)");
+		
+		SW = 18'001000000000000000000; //2 for 5th group of SWs
+		if(HEX4 != 7'b0100100)
+			$error("HEX4 should display a 2 (7'b0100100");
+
+	end
 endmodule
 
