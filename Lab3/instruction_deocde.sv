@@ -2,7 +2,7 @@ module instruction_decode (
     input [31:0] inst, 
     
     //still output funct7, imm, etc. and later choose to use field based on instruction type
-    output  [6:0]   funct7;
+    output  [6:0]   funct7,
     output  [4:0]   rs1,
     output  [4:0]   rs2,
     output  [4:0]   rd,
