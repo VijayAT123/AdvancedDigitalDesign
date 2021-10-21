@@ -28,7 +28,7 @@ instruction_decode decoder (
     .immI       (immI),
     .immS       (immS),
     .immU       (immU),
-    .opcode     (opcode)
+    .opcode     (opcode),
     .inst_type  (inst_type)
 )
 
@@ -39,10 +39,11 @@ always_comb begin
     regwrite = 1'b1;     //except for csrrw HEX
     gpio_we = 1'b0;      //except for csrrw HEX
 
-    if(opcode == 7'h33 && inst_type == 2'b00) begin //R-Type insts
+    //R-Type insts
+    if(opcode == 7'h33 && inst_type == 2'b00) begin 
         alusrc = 1'b0;
         //add
-        if ((funct7 == 7'h0) && (funct3 == 3'b0) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+        if ((funct7 == 7'h0) && (funct3 == 3'b000) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b0011;
         //sub 
         else if ((funct7 == 7'h20) && (funct3 == 3'b000) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
@@ -64,7 +65,7 @@ always_comb begin
             aluop = ???????; 
             //TODO correct aluop
         //and
-        else if ((funct7 == 7'h0) && (funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+        else if ((funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b0000;
         //or
         else if ((funct7 == 7'h0) && (funct3 == 3'b110) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
@@ -76,9 +77,12 @@ always_comb begin
         else if ((funct7 == 7'h0) && (funct3 == 3'b010) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b1000;
     end
-    else if (opcode == 7'h13 && inst_type == 01 ) begin
-        //add
-        if ((funct7 == 7'h0) && (funct3 == 3'b0) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+
+    //I-type insts
+    else if (opcode == 7'h13 && inst_type == 01) begin
+        alusrc = 1'b1;
+        //addi
+        if ((funct7 == 7'h0) && (funct3 == 3'b0) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX))) //=== not synthesizable
             aluop = 4'b0011;
         
     end
