@@ -86,3 +86,9 @@ always_comb begin
             aluop = 4'b0011;
         
     end
+
+    //U-type insts
+    else if (opcode == 2'b10) begin
+        regsel = 2'b01;
+        //lui
+    end
