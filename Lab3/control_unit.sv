@@ -77,7 +77,7 @@ always_comb begin
             aluop = 4'b1000;
     end
     else if (opcode == 7'h13 && inst_type == 01 ) begin
-        //addi
+        //add
         if ((funct7 == 7'h0) && (funct3 == 3'b0) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b0011;
         
