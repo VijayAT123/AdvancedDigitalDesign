@@ -74,6 +74,39 @@ always_comb begin
         else if ((funct7 == 7'h0) && (funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b0010;
         //sll
+        else if ((funct7 == 7'h0) && (funct3 == 3'b001) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //srl todo
+        else if ((funct7 == 7'h0) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //sra
+        else if ((funct7 == 7'h20) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //cssrw Hex
+        else if ((funct7 == 7'h0) && (funct3 == 3'b001) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //ssrw SW
+        else if ((funct7 == 7'h0) && (funct3 == 3'b001) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //adddi
+        else if ((funct7 == 7'h0) && (funct3 == 3'b000) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //andi
+        else if ((funct7 == 7'h0) && (funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //xori
+        else if ((funct7 == 7'h0) && (funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //slli
+        else if ((funct7 == 7'h0) && (funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //srai
+        else if ((funct7 == 7'h0) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //srli
+        else if ((funct7 == 7'h0) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //lui
         else if ((funct7 == 7'h0) && (funct3 == 3'b010) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b1000;
     end
