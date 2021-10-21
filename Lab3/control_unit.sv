@@ -65,7 +65,7 @@ always_comb begin
             aluop = ???????; 
             //TODO correct aluop
         //and
-        else if ((funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+        else if ((funct7 == 7'h0) && (funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b0000;
         //or
         else if ((funct7 == 7'h0) && (funct3 == 3'b110) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))

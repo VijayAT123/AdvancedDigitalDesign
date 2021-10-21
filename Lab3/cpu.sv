@@ -6,6 +6,9 @@ logic   [0: 0]  clk;
 logic   [0: 0]  reset;
 reg     [11:0]  prog_counter_fetch; //12 bit wide to match #rows in instruction_mem
 logic   [31:0]  instruction_mem [4095:0]; //4096 x 32
+logic   [2: 0]  inst_type;
+logic   [31:0]  instruction_EX;
+
 
 
 instruction_decode decoder (
