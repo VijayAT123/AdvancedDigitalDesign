@@ -8,8 +8,11 @@ module control_unit (
     input   [11:0]  immI,
     input   [11:0]  immS,
     input   [19:0]  immU,
-    input   [2:0]   inst_type
+    input   [2:0]   inst_type,
 
-    output  []
+    output  [0:0]   regwrite,
+    output  [0:0]   regsel,
+    output  [0:0]   aluop,
+    output  [0:0]   gpio_we    
     
 );
