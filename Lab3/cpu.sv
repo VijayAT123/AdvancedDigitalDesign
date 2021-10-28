@@ -11,6 +11,7 @@ assign  imm12_EX = {20{inst[31], imm12_EX}; //sign extension; add 20 leading bit
 logic   [19:0]  imm20_EX;
 assign  imm20_EX = {imm20_EX, 12'b0}; //cat 12 0s to make 32 bits in length
 logic   [6: 0]  opcode_EX;
+logic   [3: 0]  csr;
 
 ///////CONTROL UNIT//////
 logic   [3: 0]   aluop;
@@ -55,19 +56,16 @@ instruction_decode decoder (
     .immS       (imm12_EX),
     .immU       (imm20_EX),
     .opcode     (opcode_EX),
-    .inst_type  (inst_type)
+    .inst_type  (inst_type),
+    .csr        (csr_EX)
 );
 
 control_unit cu (
     .funct7     (funct7_EX),
-    .rs1        (rs1_EX),
-    .rs2        (rs2_EX),
-    .rd         (rd_EX),
     .funct3     (funct3_EX),
     .immI       (imm12_EX),
     .immS       (imm12_EX),
     .immU       (imm20_EX),
-    .opcode     (opcode_EX),
     .inst_type  (inst_type),
 
     .aluop      (aluop),
@@ -123,9 +121,9 @@ end
 always_comb 
     b_EX = alusrc_EX?imm12_EX:readdata2_EX; 
 
-//GPIO_out MUX
-always_comb
-    gpio_out = gpio_we?//todo what is output when enable is off?
+//GPIO_out register w enable
+always_ff @ (posedge clk) 
+    if (gpio_we) GPIO_out <= readdata1_EX;
 
 //GPIO_in register
 always_ff @ (posedge clk)
