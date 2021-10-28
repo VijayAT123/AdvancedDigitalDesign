@@ -18,20 +18,6 @@ module control_unit (
     output  [0:0]   gpio_we    
 );
 
-//migjt get moved to CPU module
-instruction_decode decoder (
-    .funct7     (funct7),
-    .rs1        (rs1),
-    .rs2        (rs2),
-    .rd         (rd),
-    .funct3     (funct3),
-    .immI       (immI),
-    .immS       (immS),
-    .immU       (immU),
-    .opcode     (opcode),
-    .inst_type  (inst_type)
-)
-
 always_comb begin 
     regwrite = 1'b1;     //except for csrrw HEX
     gpio_we = 1'b0;      //except for csrrw HEX
@@ -76,38 +62,11 @@ always_comb begin
         //sll
         else if ((funct7 == 7'h0) && (funct3 == 3'b001) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b1000;
-        //srl todo
+        //srl
         else if ((funct7 == 7'h0) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b1000;
         //sra
         else if ((funct7 == 7'h20) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //cssrw Hex
-        else if ((funct7 == 7'h0) && (funct3 == 3'b001) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //ssrw SW
-        else if ((funct7 == 7'h0) && (funct3 == 3'b001) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //adddi
-        else if ((funct7 == 7'h0) && (funct3 == 3'b000) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //andi
-        else if ((funct7 == 7'h0) && (funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //xori
-        else if ((funct7 == 7'h0) && (funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //slli
-        else if ((funct7 == 7'h0) && (funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //srai
-        else if ((funct7 == 7'h0) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //srli
-        else if ((funct7 == 7'h0) && (funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
-            aluop = 4'b1000;
-        //lui
-        else if ((funct7 == 7'h0) && (funct3 == 3'b010) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
             aluop = 4'b1000;
     end
 
@@ -115,13 +74,28 @@ always_comb begin
     else if (opcode == 7'h13 && inst_type == 01) begin
         alusrc = 1'b1;
         //addi
-        if ((funct7 == 7'h0) && (funct3 == 3'b0) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX))) //=== not synthesizable
+        if ((funct3 == 3'b000) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX))) //=== not synthesizable
             aluop = 4'b0011;
-        
+        //andi
+        else if ((funct3 == 3'b111) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //xori
+        else if ((funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //slli
+        else if ((funct3 == 3'b100) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //srai
+        else if ((funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
+        //srli
+        else if ((funct3 == 3'b101) && ((immI === 12'bX)|| (immS === 12'bX)|| (immU=== 12'bX)))
+            aluop = 4'b1000;
     end
 
     //U-type insts
     else if (opcode == 2'b10) begin
         regsel = 2'b01;
-        //lui
+        //lui - bypasses ALU
     end
+endmodule

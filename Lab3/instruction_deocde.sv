@@ -8,7 +8,6 @@ module instruction_decode (
     output  [4:0]   rd,
     output  [2:0]   funct3,
     output  [11:0]  immI,
-    output  [11:0]  immS,
     output  [19:0]  immU,
     output  [6:0]   opcode,
 
@@ -25,10 +24,10 @@ module instruction_decode (
     assign rd = [11:7];
 
     //I-type
-    assign immI = inst[31:20];
+    assign immI = {inst[31:25], inst[11:7]}; //sign extension to 32 bits with leqading inst bit(bit 31) as sign bit
 
-    //S-type
-    assign immS = {inst[31:25], inst[11:7]};
+    //U-type
+    assign immU = {inst[31:12]}; 
 
     always_comb begin
         if (opcode == 7'b0110011) 
