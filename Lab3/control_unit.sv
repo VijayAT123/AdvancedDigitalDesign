@@ -2,18 +2,17 @@
 //TODO csrrw
 
 module control_unit (
-    input   [6:0]   funct7,
-    input   [2:0]   funct3,
-    input   [11:0]  immI,
-    input   [11:0]  immS,
-    input   [19:0]  immU,
-    input   [2:0]   inst_type,
+    input	logic	[6:0]   funct7,
+    input	logic	[2:0]   funct3,
+    input   	logic	[11:0]  immI,
+    input   	logic	[19:0]  immU,
+    input   	logic	[2:0]   inst_type,
 
-    output  [3:0]   aluop,
-    output  [0:0]   alusrc,
-    output  [1:0]   regsel,
-    output  [0:0]   regwrite,
-    output  [0:0]   gpio_we    
+    output  	logic	[3:0]   aluop,
+    output	logic	[0:0]   alusrc,
+    output  	logic	[1:0]   regsel,
+    output  	logic	[0:0]   regwrite,
+    output  	logic	[0:0]   gpio_we    
 );
 
 always_comb begin 
@@ -46,8 +45,7 @@ always_comb begin
             aluop = 4'b1100;
         //sltu
         else if ((funct7 == 7'h0) && (funct3 == 3'b011))
-            aluop = ???????; 
-            //TODO correct aluop
+            aluop = 4'b1110;
         //and
         else if ((funct7 == 7'h0) && (funct3 == 3'b111))
             aluop = 4'b0000;
@@ -69,8 +67,9 @@ always_comb begin
     end
 
     //csrrw
-    else if (inst_type = 2'b11 && funct3 == 3'b001)
+    else if (inst_type == 2'b11 && funct3 == 3'b001) begin
         //TODO aluop
+    end
 
     //I-type insts
     else if (inst_type == 01) begin
@@ -106,4 +105,7 @@ always_comb begin
         regsel = 2'b01;
         //lui - bypasses ALU
     end
+
+end
+
 endmodule
