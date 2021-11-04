@@ -127,7 +127,7 @@ end
 always_comb 
     b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
 
-//regsel MUX 
+//regsel register 
 always_ff @(posedge clk)
     regsel_WB <= regsel_EX;
 
@@ -138,7 +138,6 @@ always_ff @ (posedge clk)
 //gpio_in register
 always_ff @ (posedge clk) begin
     gpio_in_WB <= gpio_in;
-	//TODO should be for switches
 end
 
 //regwrite register
