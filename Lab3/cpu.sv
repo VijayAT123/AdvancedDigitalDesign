@@ -1,16 +1,19 @@
-module cpu ();
+module cpu (
+    input   logic   [0: 0]  clk,
+    input   logic   [0: 0]  reset,
+    input   logic   [31:0]  gpio_in,  //switches; upper 14 bits should be 0
+    output  logic   [31:0]  gpio_out
+);
 
 
 ////////CPU////////
-logic   [0: 0]  clk;
-logic   [0: 0]  reset;
+
 reg     [11:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
 logic   [31:0]  instruction_mem [4095:0]; //4096 x 32
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
 logic   [4: 0]  regdest_WB;
 logic   [31:0]  writedata_WB;
-logic	[31:0]	gpioin;
 
 ///////DECODER//////
 logic   [6: 0]  funct7_EX;
@@ -33,7 +36,6 @@ logic   [1: 0]   regsel_WB;
 logic   [0: 0]   regwrite_EX;
 logic   [0: 0]   we;
 logic   [0: 0]   gpio_we; 
-logic   [31:0]   gpio_out;
 
 
 ///////REGISTER///////
@@ -91,7 +93,7 @@ regfile register (
 );
 
 alu alu (
-    	.A          (a_EX),
+    .A          (a_EX),
 	.B          (b_EX),
 	.op         (aluop),
 	.R          (r_EX),
@@ -114,7 +116,7 @@ always_ff @(posedge clk) begin
     regsel_WB <= regsel_EX;
 
     if (regsel_WB == 2'b00)
-        writedata_WB <= gpioin;
+        writedata_WB <= gpio_in;
     else if(regsel_WB == 2'b01)
         writedata_WB <= {imm20_WB, 12'b0}; //cat 12 0s to make 32 bits in length
     else if(regsel_WB == 2'b10)
@@ -125,13 +127,13 @@ end
 always_comb 
     b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
 
-//GPIO_out register w enable
+//gpio_out register w enable
 always_ff @ (posedge clk) 
     if (gpio_we) gpio_out <= readdata1_EX;
 
-//GPIO_in register
+//gpio_in register
 always_ff @ (posedge clk)
-    gpioin <= 32'b0;
+    gpio_in <= gpio_in
 	//TODO should be for switches
 
 //regwrite register
