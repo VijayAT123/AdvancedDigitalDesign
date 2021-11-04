@@ -14,6 +14,7 @@ logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
 logic   [4: 0]  regdest_WB;
 logic   [31:0]  writedata_WB;
+logic   [31:0]  gpio_in_WB;
 
 ///////DECODER//////
 logic   [6: 0]  funct7_EX;
@@ -116,7 +117,7 @@ always_ff @(posedge clk) begin
     regsel_WB <= regsel_EX;
 
     if (regsel_WB == 2'b00)
-        writedata_WB <= gpio_in;
+        writedata_WB <= gpio_in_WB;
     else if(regsel_WB == 2'b01)
         writedata_WB <= {imm20_WB, 12'b0}; //cat 12 0s to make 32 bits in length
     else if(regsel_WB == 2'b10)
@@ -132,13 +133,15 @@ always_ff @ (posedge clk)
     if (gpio_we) gpio_out <= readdata1_EX;
 
 //gpio_in register
-always_ff @ (posedge clk)
-    gpio_in <= gpio_in
+always_ff @ (posedge clk) begin
+    gpio_in_WB <= gpio_in;
 	//TODO should be for switches
+end
 
 //regwrite register
-always_ff @ (posedge clk)
+always_ff @ (posedge clk) begin
     we <= regwrite_EX;
+end
 
 //imm20 register
 always_ff @ (posedge clk)

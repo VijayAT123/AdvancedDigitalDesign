@@ -44,7 +44,7 @@ cpu cpu (
 
 always_ff @ (posedge CLOCK_50)
 	reset <= KEY[0];
-a
+
 hexdriver hex0(.val(SW[3:0]), .HEX(HEX0[6:0])); //first 4 switches passed into hexdriver hex0; executes if assign
 hexdriver hex1(.val(SW[7:4]), .HEX(HEX1[6:0])); //switches 4-7 controlling hex1
 hexdriver hex2(.val(SW[11:8]), .HEX(HEX2[6:0])); //switches 8-11 controlling hex2

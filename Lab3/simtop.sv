@@ -48,16 +48,18 @@ module simtop;
 		.gpio_out(HEX)
 	);
 
-initial
+initial begin
 	reset = 1; #10; reset = 0;
+end
 
-always
+always @ (*) begin
 	clock = 1; #10; clock = 0; #10;
+end
 
 always @ (posedge clock) begin
-	for(int i = 5'b0; i < 5'b10010; ++i) {
+	for(int i = 5'b0; i < 5'b10010; ++i) begin
 		SW <= i;
-	}
+	end
 end
 
 endmodule
