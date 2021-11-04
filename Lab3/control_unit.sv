@@ -19,8 +19,6 @@ always_comb begin
     regwrite = 1'b1;     //except for csrrw HEX
     gpio_we = 1'b0;      //except for csrrw HEX
     regsel = 2'b10;      //exceot fir csrrw and lui
-    regwrite = 1'b1;     //except for csrrw HEX
-    gpio_we = 1'b0;      //except for csrrw HEX
 
     //R-Type insts
     if(inst_type == 2'b00) begin 
@@ -68,7 +66,13 @@ always_comb begin
 
     //csrrw
     else if (inst_type == 2'b11 && funct3 == 3'b001) begin
-        //TODO aluop
+        if(immI == 12'hf00) begin //switches
+            regsel = 2'b00;
+        end
+        else if (immI == 12'hf02)
+            gpio_we = 1'b1;
+            regsel = 2'b00;
+            regwrite = 1'b0;
     end
 
     //I-type insts
