@@ -2,17 +2,17 @@
 //TODO csrrw
 
 module control_unit (
-    input	logic	[6:0]   funct7,
+    input   logic	[6:0]   funct7,
     input	logic	[2:0]   funct3,
-    input   	logic	[11:0]  immI,
-    input   	logic	[19:0]  immU,
-    input   	logic	[2:0]   inst_type,
+    input   logic	[11:0]  immI,
+    input  	logic	[19:0]  immU,
+    input  	logic	[2:0]   inst_type,
 
-    output  	logic	[3:0]   aluop,
+    output 	logic	[3:0]   aluop,
     output	logic	[0:0]   alusrc,
-    output  	logic	[1:0]   regsel,
-    output  	logic	[0:0]   regwrite,
-    output  	logic	[0:0]   gpio_we    
+    output 	logic	[1:0]   regsel,
+    output 	logic	[0:0]   regwrite,
+    output 	logic	[0:0]   gpio_we    
 );
 
 always_comb begin 

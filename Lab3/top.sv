@@ -45,14 +45,14 @@ cpu cpu (
 always_ff @ (posedge CLOCK_50)
 	reset <= KEY[0];
 
-hexdriver hex0(.val(SW[3:0]), .HEX(HEX0[6:0])); //first 4 switches passed into hexdriver hex0; executes if assign
-hexdriver hex1(.val(SW[7:4]), .HEX(HEX1[6:0])); //switches 4-7 controlling hex1
-hexdriver hex2(.val(SW[11:8]), .HEX(HEX2[6:0])); //switches 8-11 controlling hex2
-hexdriver hex3(.val(SW[15:12]), .HEX(HEX3[6:0])); //switches 12-15 controlling hex3
-hexdriver hex4(.val({2'b00, SW[17:16]}), .HEX(HEX4[6:0])); //concatenates 2 binary 0s w SW[17:16] values; 4 bit binary
-hexdriver hex5(.val(4'b0), .HEX(HEX5[6:0]));
-hexdriver hex6(.val(4'b0), .HEX(HEX6[6:0]));
-hexdriver hex7(.val(4'b0), .HEX(HEX7[6:0]));
+hexdriver hex0(.val(gpio_out[ 3: 0]), .HEX(HEX0[6:0])); //first 4 switches passed into hexdriver hex0; executes if assign
+hexdriver hex1(.val(gpio_out[ 7: 4]), .HEX(HEX1[6:0])); //switches 4-7 controlling hex1
+hexdriver hex2(.val(gpio_out[11: 8]), .HEX(HEX2[6:0])); //switches 8-11 controlling hex2
+hexdriver hex3(.val(gpio_out[15:12]), .HEX(HEX3[6:0])); //switches 12-15 controlling hex3
+hexdriver hex4(.val(gpio_out[19:16]), .HEX(HEX4[6:0])); //concatenates 2 binary 0s w SW[17:16] values; 4 bit binary
+hexdriver hex5(.val(gpio_out[23:20]), .HEX(HEX5[6:0]));
+hexdriver hex6(.val(gpio_out[27:24]), .HEX(HEX6[6:0]));
+hexdriver hex7(.val(gpio_out[31:28]), .HEX(HEX7[6:0]));
 
 
 
