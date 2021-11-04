@@ -15,7 +15,7 @@ module simtop;
 	top dut
 	(
 		//////////// CLOCK //////////
-		.CLOCK_50(clk),
+		.CLOCK_50(clock),
 		.CLOCK2_50(),
 	    .CLOCK3_50(),
 
@@ -30,6 +30,7 @@ module simtop;
 		.SW(SW),
 
 		//////////// SEG7 //////////
+		.HEX(HEX),
 		.HEX0(HEX0),
 		.HEX1(HEX1),
 		.HEX2(HEX2),
@@ -42,22 +43,24 @@ module simtop;
 
 // your code here
 	cpu cpu (
-		.clk(clk),
+		.clk(clock),
 		.reset(reset),
 		.gpio_in({14'b0, SW}),
 		.gpio_out(HEX)
 	);
 
 initial begin
-	reset = 1; #10; reset = 0;
+	reset = 1; #20; reset = 0;
 end
 
-always @ (*) begin
+always begin
 	clock = 1; #10; clock = 0; #10;
 end
 
-always @ (posedge clock) begin
-	for(int i = 5'b0; i < 5'b10010; ++i) begin
+
+
+always_ff @ (posedge clock) begin
+	for(int i = 18'b0; i < 18'b111111111111111111; ++i) begin
 		SW <= i;
 	end
 end

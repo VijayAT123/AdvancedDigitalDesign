@@ -21,6 +21,7 @@ module top (
 	input 		    [17:0]		SW,
 
 	//////////// SEG7 //////////
+	logic 			[31:0]		HEX,
 	output		     [6:0]		HEX0,
 	output		     [6:0]		HEX1,
 	output		     [6:0]		HEX2,
@@ -39,7 +40,7 @@ cpu cpu (
 		.clk(CLOCK_50),
 		.reset(reset),
 		.gpio_in({14'b0, SW}),
-		.gpio_out(HEX)
+		.gpio_out(gpio_out)
 );
 
 always_ff @ (posedge CLOCK_50)
