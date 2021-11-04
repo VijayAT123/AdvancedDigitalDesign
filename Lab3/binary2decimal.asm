@@ -14,12 +14,7 @@
  add t0,t0,t3 
  addi t1,t1,1 
  blt t1,t4,loop
- 
- #li a7,5 
- #ecall
- #add t0,t0,a0
- #bne a0,zero,loop
- 
+  
  done:
  li t0, 8 #read input string from user
  li a1, 20 #allocate space for the string
