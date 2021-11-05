@@ -3,7 +3,7 @@
 /* Top-level module for CSCE611 RISC-V CPU, for running under simulation.  In
  * this case, the I/Os and clock are driven by the simulator. */
 
-module simtop;
+module simtop();
 
 	logic clock;
 	logic reset;
@@ -42,28 +42,27 @@ module simtop;
 	);
 
 // your code here
-	cpu cpu (
-		.clk(clock),
-		.reset(reset),
-		.gpio_in({14'b0, SW}),
-		.gpio_out(HEX)
-	);
 
 initial begin
 	reset = 1; #20; reset = 0;
+	clock = 0;
+	SW <= 18'b000000000000000000;
+	if((HEX0 !== 7'b1000000) || (HEX1 !== 7'b1000000) || (HEX2 !== 7'b1000000) 
+		|| (HEX3 !== 7'b1000000) || (HEX4 !== 7'b1000000) || (HEX5 !== 7'b1000000)
+		|| (HEX6 !== 7'b1000000) || (HEX7 !== 7'b1000000)) begin //automatic test case; all switches off so all displays should show 0
+			$error("All 7 segs should display a 0 (7'b1000000)");
+	end
 end
 
 always begin
 	clock = 1; #10; clock = 0; #10;
 end
 
-
-
-always_ff @ (posedge clock) begin
+always @ (posedge clock) begin
 	for(int i = 18'b0; i < 18'b111111111111111111; ++i) begin
 		SW <= i;
+		#10;
 	end
 end
 
 endmodule
-

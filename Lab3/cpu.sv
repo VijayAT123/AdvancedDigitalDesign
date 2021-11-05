@@ -9,9 +9,9 @@ module cpu (
 ////////CPU////////
 
 logic   [31:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
-logic   [31:0]  instruction_mem [31:0]; //4096 x 32
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
+logic   [31:0]  instruction_mem [31:0]; //4096 x 32
 logic   [4: 0]  regdest_WB;
 logic   [31:0]  writedata_WB;
 logic   [31:0]  gpio_in_WB;
@@ -101,15 +101,16 @@ alu alu (
 
 initial begin
     $readmemh("hexcode.txt", instruction_mem); //readmemh always in initial
-    instruction_EX <= instruction_mem[0];
+    prog_counter_F = 0;
 end
 
 always_ff @(posedge clk, posedge reset) begin
     if (reset)
         prog_counter_F <= 32'b0;
-    else
+    else begin
         instruction_EX <= instruction_mem[prog_counter_F];
         prog_counter_F <= prog_counter_F + 1'b1;
+    end
 end
 
 

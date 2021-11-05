@@ -21,7 +21,7 @@ module top (
 	input 		    [17:0]		SW,
 
 	//////////// SEG7 //////////
-	logic 			[31:0]		HEX,
+	output 			[31:0]		HEX,
 	output		     [6:0]		HEX0,
 	output		     [6:0]		HEX1,
 	output		     [6:0]		HEX2,
@@ -116,7 +116,4 @@ hexdriver hex7(.val(gpio_out[31:28]), .HEX(HEX7[6:0]));
 			leds <= leds >> 1;
 		end
 	end
-
-	
-
 endmodule
