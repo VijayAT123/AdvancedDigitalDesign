@@ -65,14 +65,15 @@ always_comb begin
     end
 
     //csrrw
-    else if (inst_type == 2'b11 && funct3 == 3'b001) begin
+    else if (inst_type == 2'b11) begin
         if(immI == 12'hf00) begin //switches
             regsel = 2'b00;
         end
-        else if (immI == 12'hf02)
+        else if (immI == 12'hf02) begin
             gpio_we = 1'b1;
             regsel = 2'b00;
             regwrite = 1'b0;
+        end
     end
 
     //I-type insts
@@ -96,7 +97,7 @@ always_comb begin
              //TODO handle shamt from imm12
         //srai
         else if (funct3 == 3'b101 && funct7 == 7'b0100000)
-            aluop = 4'b1010;
+            aluop = 4'b1011;
             //TODO handle shamt from imm12
         //srli
         else if (funct3 == 3'b101 && funct7 == 7'b0000000)
