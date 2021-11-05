@@ -8,8 +8,8 @@ module cpu (
 
 ////////CPU////////
 
-reg     [11:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
-logic   [31:0]  instruction_mem [4095:0]; //4096 x 32
+logic   [31:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
+logic   [31:0]  instruction_mem [31:0]; //4096 x 32
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
 logic   [4: 0]  regdest_WB;
@@ -35,11 +35,11 @@ logic   [0: 0]   alusrc_EX;
 logic   [1: 0]   regsel_EX;
 logic   [1: 0]   regsel_WB;
 logic   [0: 0]   regwrite_EX;
-logic   [0: 0]   we;
 logic   [0: 0]   gpio_we; 
 
 
 ///////REGISTER///////
+logic   [0: 0]   we;
 logic   [31:0]   readdata1_EX;
 logic   [31:0]   readdata2_EX;
 
@@ -50,7 +50,6 @@ logic   [31:0]   b_EX;
 logic	[31:0]	 r_EX;
 logic	[31:0]	 r_WB;
 assign  a_EX =   readdata1_EX;
-logic	[0:0]	 zero;
 
 
 
@@ -77,7 +76,7 @@ control_unit cu (
     .aluop      (aluop),
     .alusrc     (alusrc_EX),
     .regsel     (regsel_EX),
-    .regwrite    (regwrite_EX),
+    .regwrite   (regwrite_EX),
     .gpio_we    (gpio_we)
 );
 
@@ -97,19 +96,20 @@ alu alu (
     .A          (a_EX),
 	.B          (b_EX),
 	.op         (aluop),
-	.R          (r_EX),
-	.zero	    (zero)
+	.R          (r_EX)
 );
 
-initial 
+initial begin
     $readmemh("hexcode.txt", instruction_mem); //readmemh always in initial
+    instruction_EX <= instruction_mem[0];
+end
 
-always_ff @(posedge clk) begin
+always_ff @(posedge clk, posedge reset) begin
     if (reset)
         prog_counter_F <= 32'b0;
     else
         instruction_EX <= instruction_mem[prog_counter_F];
-        prog_counter_F <= prog_counter_F + 12'b1;
+        prog_counter_F <= prog_counter_F + 1'b1;
 end
 
 
@@ -128,7 +128,7 @@ always_comb
     b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
 
 //regsel register 
-always_ff @(posedge clk)
+always_ff @ (posedge clk)
     regsel_WB <= regsel_EX;
 
 //gpio_out register w enable
@@ -146,18 +146,18 @@ always_ff @ (posedge clk) begin
 end
 
 //imm20 register
-always_ff @ (posedge clk)
+always_ff @ (posedge clk) begin
     imm20_WB <= imm20_EX;
-
+end
 //r_ex -> r_wb register
-always_ff @ (posedge clk)
+always_ff @ (posedge clk) begin
     r_WB <= r_EX;
-
+end
 //regdest_wb register
-always_ff @ (posedge clk)
+always_ff @ (posedge clk) begin
     regdest_WB <= rd_EX; 
-
-always_ff @ (posedge clk)
+end
+always_ff @ (posedge clk) begin
     regsel_WB <= regsel_EX;
-
+end
 endmodule

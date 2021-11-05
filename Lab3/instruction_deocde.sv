@@ -1,17 +1,17 @@
 module instruction_decode ( 
-    input logic	[31:0] inst, 
+    input   logic   [31:0] inst, 
     
     //still output funct7, imm, etc. and later choose to use field based on instruction type
     output	logic	[6:0]   funct7,
     output	logic	[4:0]   rs1,
-    output  	logic	[4:0]   rs2,
-    output  	logic	[4:0]   rd,
-    output  	logic	[2:0]   funct3,
+    output  logic	[4:0]   rs2,
+    output  logic	[4:0]   rd,
+    output  logic	[2:0]   funct3,
     output	logic	[11:0]  immI,
-    output  	logic	[19:0]  immU,
-    output  	logic	[6:0]   opcode,
+    output  logic	[19:0]  immU,
+    output  logic	[6:0]   opcode,
 
-    output  	logic	[2:0]   inst_type
+    output  logic	[2:0]   inst_type
 );
 
     assign opcode = inst [6:0];
