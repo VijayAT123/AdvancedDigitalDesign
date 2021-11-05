@@ -101,11 +101,11 @@ alu alu (
 
 initial begin
     $readmemh("hexcode.txt", instruction_mem); //readmemh always in initial
-    prog_counter_F = 0;
 end
 
 always_ff @(posedge clk, posedge reset) begin
     if (reset)
+        instruction_EX <= 32'b0;
         prog_counter_F <= 32'b0;
     else begin
         instruction_EX <= instruction_mem[prog_counter_F];
