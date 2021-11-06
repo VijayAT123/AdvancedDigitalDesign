@@ -1,6 +1,172 @@
-if ((SW == 18’b0) && (! ((HEX0 == 7’b1000000) && (HEX1 == 7’b1000000) && (HEX2== 7’b1000000) && (HEX3== 7’b1000000)&& (HEX4== 7’b1000000)&& (HEX5== 7’b1000000) && (HEX6== 7’b1000000) && (HEX7== 7’b1000000)) begin
+if ((SW == 18’b0) && (! ((HEX7 == 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7’b1000000) && (HEX0== 7’b1000000)) begin
 	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7’b1000000, HEX0 should display a 7’b1000000);
 end
 
 else if ((SW == 18’b1) && (! ((HEX0 == 7'b1111001) && (HEX1 == 7’b1000000) && (HEX2== 7’b1000000) && (HEX3== 7’b1000000)&& (HEX4== 7’b1000000)&& (HEX5== 7’b1000000) && (HEX6== 7’b1000000) && (HEX7== 7’b1000000)) begin
 	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7’b1000000, HEX0 should display a 7’b1000000);
+
+end
+
+else if ((SW == 18’b10) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7’b1000000) && (HEX0 == 7'b0100100)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7’b1000000, HEX0 should display a 7'b0100100);
+
+end
+
+else if ((SW == 18’b11) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7’b1000000) && (HEX0 == 7'b0110000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7’b1000000, HEX0 should display a 7'b0110000);
+
+end
+
+else if ((SW == 18’b101) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7’b1000000) && (HEX0 == 7'b0010010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7’b1000000, HEX0 should display a 7'b0010010);
+
+end
+
+else if ((SW == 18’b1011) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b1111001) && (HEX0 == 7'b1111001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b1111001, HEX0 should display a 7'b1111001);
+
+end
+
+else if ((SW == 18’b1010) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b1111001) && (HEX0 == 7’b1000000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b1111001, HEX0 should display a 7’b1000000);
+
+end
+
+else if ((SW == 18’b10010) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b1111001) && (HEX0 == 7'b0)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b1111001, HEX0 should display a 7'b0);
+
+end
+
+else if ((SW == 18’b10110) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b0100100) && (HEX0 == 7'b0100100)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b0100100, HEX0 should display a 7'b0100100);
+
+end
+
+else if ((SW == 18’b111001) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b0010010) && (HEX0 == 7'b1111000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b0010010, HEX0 should display a 7'b1111000);
+
+end
+
+else if ((SW == 18’b101000) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b0011001) && (HEX0 == 7’b1000000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b0011001, HEX0 should display a 7’b1000000);
+
+end
+
+else if ((SW == 18'b1010101) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7’b1000000) && (HEX1== 7'b0) && (HEX0 == 7'b0010010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7’b1000000, HEX1 should display a 7'b0, HEX0 should display a 7'b0010010);
+
+end
+
+else if ((SW == 18’b1101000) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b1111001) && (HEX1== 7’b1000000) && (HEX0 ==  7'b0011001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b1111001, HEX1 should display a 7’b1000000, HEX0 should display a  7'b0011001);
+
+end
+
+else if ((SW == 18’b11010010) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b0100100) && (HEX1== 7'b1111001) && (HEX0 ==  7’b1000000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b0100100, HEX1 should display a 7'b1111001, HEX0 should display a  7’b1000000);
+
+end
+
+else if ((SW == 18’b10011100) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b1111001) && (HEX1== 7'b0010010) && (HEX0 ==  7'b0000010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b1111001, HEX1 should display a 7'b0010010, HEX0 should display a  7'b0000010);
+
+end
+
+else if ((SW == 18’b101101001) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b0110000) && (HEX1== 7'b0000010) && (HEX0 ==  7'b1111001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b0110000, HEX1 should display a 7'b0000010, HEX0 should display a  7'b1111001);
+
+end
+
+else if ((SW == 18’b101110001) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b0110000) && (HEX1== 7'b0000010) && (HEX0 ==  7’b0010000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b0110000, HEX1 should display a 7'b0000010, HEX0 should display a  7’b0010000);
+
+end
+
+else if ((SW == 18’b1000110111) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b0010010) && (HEX1== 7'b0000010) && (HEX0 ==  7’b1111000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b0010010, HEX1 should display a 7'b0000010, HEX0 should display a  7’b1111000);
+
+end
+
+else if ((SW == 18’b1100110011) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7’b1000000)&& (HEX2== 7'b0) && (HEX1== 7'b1111001) && (HEX0 ==  7’b0010000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7’b1000000, HEX2 should display a 7'b0, HEX1 should display a 7'b1111001, HEX0 should display a  7’b0010000);
+
+end
+
+else if ((SW == 18’b10101010101) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7'b1111001)&& (HEX2== 7'b0110000) && (HEX1== 7'b0000010) && (HEX0 ==  7'b0010010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7'b1111001, HEX2 should display a 7'b0110000, HEX1 should display a 7'b0000010, HEX0 should display a  7'b0010010);
+
+end
+
+else if ((SW == 18’b11100110001) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7'b1111001)&& (HEX2== 7'b0) && (HEX1== 7'b0011001) && (HEX0 ==  7'b1111001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7'b1111001, HEX2 should display a 7'b0, HEX1 should display a 7'b0011001, HEX0 should display a  7'b1111001);
+
+end
+
+else if ((SW == 18’b110101111000) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7'b0110000)&& (HEX2== 7'b0011001) && (HEX1== 7'b0011001) && (HEX0 ==  7'b0)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7'b0110000, HEX2 should display a 7'b0011001, HEX1 should display a 7'b0011001, HEX0 should display a  7'b0);
+
+end
+
+else if ((SW == 18’b100011011101) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7'b0100100)&& (HEX2== 7'b0100100) && (HEX1== 7'b0000010) && (HEX0 ==  7’b0010000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7'b0100100, HEX2 should display a 7'b0100100, HEX1 should display a 7'b0000010, HEX0 should display a  7’b0010000);
+
+end
+
+else if ((SW == 18’b1010010111011) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7'b0010010)&& (HEX2== 7'b0110000) && (HEX1== 7’b1000000) && (HEX0 ==  7'b1111000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7'b0010010, HEX2 should display a 7'b0110000, HEX1 should display a 7’b1000000, HEX0 should display a  7'b1111000);
+
+end
+
+else if ((SW == 18’b1110011010111) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7’b1000000)&& (HEX3== 7'b1111000)&& (HEX2== 7'b0110000) && (HEX1== 7’b0) && (HEX0 ==  7'b0110000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7’b1000000, HEX3 should display a 7'b1111000, HEX2 should display a 7'b0110000, HEX1 should display a 7’b0, HEX0 should display a  7'b0110000);
+
+end
+
+else if ((SW == 18’b10100010010001) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b1111001)&& (HEX3== 7’b1000000)&& (HEX2== 7'b0110000) && (HEX1== 7’b0) && (HEX0 ==  7'b0010010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b1111001, HEX3 should display a 7’b1000000, HEX2 should display a 7'b0110000, HEX1 should display a 7’b0, HEX0 should display a  7'b0010010);
+
+end
+
+else if ((SW == 18’b10110001110110) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b1111001)&& (HEX3== 7'b1111001)&& (HEX2== 7'b0110000) && (HEX1== 7’b0) && (HEX0 ==  7'b0100100)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b1111001, HEX3 should display a 7'b1111001, HEX2 should display a 7'b0110000, HEX1 should display a 7’b0, HEX0 should display a  7'b0100100);
+
+end
+
+else if ((SW == 18’b101101001110100) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b0100100)&& (HEX3== 7'b0110000)&& (HEX2== 7'b1111001) && (HEX1== 7'b0010010) && (HEX0 ==  7'b0000010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b0100100, HEX3 should display a 7'b0110000, HEX2 should display a 7'b1111001, HEX1 should display a 7'b0010010, HEX0 should display a  7'b0000010);
+
+end
+
+else if ((SW == 18’b100101110101110) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b1111001)&& (HEX3== 7’b0010000)&& (HEX2== 7'b0110000) && (HEX1== 7'b1111000) && (HEX0 ==  7'b0011001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b1111001, HEX3 should display a 7’b0010000, HEX2 should display a 7'b0110000, HEX1 should display a 7'b1111000, HEX0 should display a  7'b0011001);
+
+end
+
+else if ((SW == 18’b1011101000101100) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b0011001)&& (HEX3== 7'b1111000)&& (HEX2==  7'b0000010) && (HEX1==  7'b0000010) && (HEX0 == 7’b1000000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b0011001, HEX3 should display a 7'b1111000, HEX2 should display a  7'b0000010, HEX1 should display a  7'b0000010, HEX0 should display a  7’b1000000);
+
+end
+
+else if ((SW == 18’b1011011101010110) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b0011001)&& (HEX3== 7'b0000010)&& (HEX2==  7’b0010000) && (HEX1==  7'b0110000) && (HEX0 == 7'b0011001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b0011001, HEX3 should display a 7'b0000010, HEX2 should display a  7’b0010000, HEX1 should display a  7'b0110000, HEX0 should display a  7'b0011001);
+
+end
+
+else if ((SW == 18’b10101110101000111) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7’b1000000) && (HEX4== 7'b0)&& (HEX3== 7’b0010000)&& (HEX2==  7'b0011001) && (HEX1==  7'b1111001) && (HEX0 == 7'b0010010)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7’b1000000, HEX4 should display a 7'b0, HEX3 should display a 7’b0010000, HEX2 should display a  7'b0011001, HEX1 should display a  7'b1111001, HEX0 should display a  7'b0010010);
+
+end
+
+else if ((SW == 18’b11101101010011010) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7'b1111001) && (HEX4== 7'b0100100)&& (HEX3== 7'b1111001)&& (HEX2==  7'b0011001) && (HEX1==  7’b0010000) && (HEX0 == 7'b0)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7'b1111001, HEX4 should display a 7'b0100100, HEX3 should display a 7'b1111001, HEX2 should display a  7'b0011001, HEX1 should display a  7’b0010000, HEX0 should display a  7'b0);
+
+end
+
+else if ((SW == 18’b100101110010100111) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7'b1111001) && (HEX4== 7'b0010010)&& (HEX3== 7'b0011001)&& (HEX2==  7'b1111000) && (HEX1==  7’b0010000) && (HEX0 == 7'b1111001)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7'b1111001, HEX4 should display a 7'b0010010, HEX3 should display a 7'b0011001, HEX2 should display a 7'b1111000, HEX1 should display a  7’b0010000, HEX0 should display a  7'b1111001);
+
+end
+
+else if ((SW == 18’b111111111111111111) && (! ((HEX7== 7’b1000000) && (HEX6 == 7’b1000000) && (HEX5== 7'b0100100) && (HEX4== 7'b0000010)&& (HEX3== 7'b0100100)&& (HEX2==  7'b1111001) && (HEX1==  7'b0011001) && (HEX0 == 7'b0110000)) begin
+	$error("HEX7 should display a 7’b1000000, HEX6 should display a 7’b1000000,HEX5 should display a 7'b0100100, HEX4 should display a 7'b0000010, HEX3 should display a 7'b0100100, HEX2 should display a 7'b1111001, HEX1 should display a  7'b0011001, HEX0 should display a  7'b0110000);
+
