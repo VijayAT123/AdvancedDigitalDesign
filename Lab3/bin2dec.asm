@@ -1,22 +1,12 @@
-
- .text 
-
- main: 
- lui t0,42949 # 0.1 in 32,32
- lui t6 6729
- li t1,0
- li t4,4
- 
- loop:
- slli t3,t1,2 
- add t3,t2,t3 
- lw t3,0(t3) 
- add t0,t0,t3 
- addi t1,t1,1 
- blt t1,t4,loop
-  
- done:
- li t0, 8 #read input string from user
- li a1, 20 #allocate space for the string
+.text 
+	li 	s5, 429496730	#const for 0.1 into x21 (s5) (32,32)
+	li	s6, 10		#constant factor
+	
+	csrrw	s0, 0xf00, zero	#read in from SW register (0xf00) and write to s0
+	mulh	t0, s5, s0	#multiplies SW's value by 0.1 and stores upper 32 bits in t0
+	mul	t1, s5, s0	#stores lower 32, fractional bits of SW x s5 in t1
+	mul
+	
+	
 
 
