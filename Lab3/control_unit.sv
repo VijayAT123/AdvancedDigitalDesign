@@ -58,10 +58,10 @@ always_comb begin
             aluop = 4'b1000;
         //srl
         else if ((funct7 == 7'h0) && (funct3 == 3'b101))
-            aluop = 4'b1000;
+            aluop = 4'b1001;
         //sra
         else if ((funct7 == 7'h20) && (funct3 == 3'b101))
-            aluop = 4'b1000;
+            aluop = 4'b1010;
     end
 
     //csrrw
