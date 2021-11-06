@@ -41,7 +41,7 @@ cpu cpu (
 		.reset(reset),
 		.gpio_in({14'b0, SW}),
 		.gpio_out(gpio_out)
-);
+    );
 
 always_ff @ (posedge CLOCK_50)
 	reset <= KEY[0];

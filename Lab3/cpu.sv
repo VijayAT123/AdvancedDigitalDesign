@@ -104,9 +104,10 @@ initial begin
 end
 
 always_ff @(posedge clk, posedge reset) begin
-    if (reset)
+    if (reset) begin
         instruction_EX <= 32'b0;
         prog_counter_F <= 32'b0;
+    end
     else begin
         instruction_EX <= instruction_mem[prog_counter_F];
         prog_counter_F <= prog_counter_F + 1'b1;

@@ -24,7 +24,7 @@ module instruction_decode (
     assign rd = inst[11:7];
 
     //I-type
-    assign immI = {inst[31:25], inst[11:7]}; //sign extension to 32 bits with leqading inst bit(bit 31) as sign bit
+    assign immI = inst[31:20]; //sign extension to 32 bits with leqading inst bit(bit 31) as sign bit
 
     //U-type
     assign immU = {inst[31:12]}; 
