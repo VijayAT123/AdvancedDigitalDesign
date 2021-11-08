@@ -13,34 +13,34 @@ module simtop();
     logic	[31:0]	gpio_out;
 
 
-	// top dut
-	// (
-	// 	//////////// CLOCK //////////
-	// 	.CLOCK_50(clock),
-	// 	.CLOCK2_50(),
-	//  .CLOCK3_50(),
+	top dut
+	(
+		//////////// CLOCK //////////
+		.CLOCK_50(clock),
+		.CLOCK2_50(),
+	 	.CLOCK3_50(),
 
-	// 	//////////// LED //////////
-	// 	.LEDG(),
-	// 	.LEDR(),
+		//////////// LED //////////
+		.LEDG(),
+		.LEDR(),
 
-	// 	//////////// KEY //////////
-	// 	.KEY(),
+		//////////// KEY //////////
+		.KEY(),
 
-	// 	//////////// SW //////////
-	// 	.SW(SW),
+		//////////// SW //////////
+		.SW(SW),
 
-	// 	//////////// SEG7 //////////
-	// 	.HEX(HEX),
-	// 	.HEX0(HEX0),
-	// 	.HEX1(HEX1),
-	// 	.HEX2(HEX2),
-	// 	.HEX3(HEX3),
-	// 	.HEX4(HEX4),
-	// 	.HEX5(HEX5),
-	// 	.HEX6(HEX6),
-	// 	.HEX7(HEX7)
-	// );
+		//////////// SEG7 //////////
+		.HEX(HEX),
+		.HEX0(HEX0),
+		.HEX1(HEX1),
+		.HEX2(HEX2),
+		.HEX3(HEX3),
+		.HEX4(HEX4),
+		.HEX5(HEX5),
+		.HEX6(HEX6),
+		.HEX7(HEX7)
+	);
 
    cpu cpu (
 		.clk(clock),

@@ -34,27 +34,29 @@ module top (
 
 logic reset;
 logic	[31:0]	gpio_in;
-assign 	gpio_in	= {14'b0, SW};
 logic	[31:0]	gpio_out;
 assign	HEX		= gpio_out;
 
 cpu cpu (
 		.clk(CLOCK_50),
-		.reset(KEY[0]),
-		.gpio_in(gpio_in),
+		.reset(~KEY[0]),
+		.gpio_in({14'b0, SW}),
 		.gpio_out(gpio_out)
     );
+initial begin
+	reset = 1; #20; reset = 0;
+end
 
 //most significant gpio_out bits go into hex0; bin2dec in least-most significant
 
-hexdriver hex7(.val(gpio_out[ 3: 0]), .HEX(HEX0[6:0])); 
-hexdriver hex6(.val(gpio_out[ 7: 4]), .HEX(HEX1[6:0])); 
-hexdriver hex5(.val(gpio_out[11: 8]), .HEX(HEX2[6:0])); 
-hexdriver hex4(.val(gpio_out[15:12]), .HEX(HEX3[6:0])); 
-hexdriver hex3(.val(gpio_out[19:16]), .HEX(HEX4[6:0]));
-hexdriver hex2(.val(gpio_out[23:20]), .HEX(HEX5[6:0]));
-hexdriver hex1(.val(gpio_out[27:24]), .HEX(HEX6[6:0]));
-hexdriver hex0(.val(gpio_out[31:28]), .HEX(HEX7[6:0]));
+hexdriver hex7(.val(gpio_out[ 3: 0]), .HEX(HEX7[6:0])); 
+hexdriver hex6(.val(gpio_out[ 7: 4]), .HEX(HEX6[6:0])); 
+hexdriver hex5(.val(gpio_out[11: 8]), .HEX(HEX5[6:0])); 
+hexdriver hex4(.val(gpio_out[15:12]), .HEX(HEX4[6:0])); 
+hexdriver hex3(.val(gpio_out[19:16]), .HEX(HEX3[6:0]));
+hexdriver hex2(.val(gpio_out[23:20]), .HEX(HEX2[6:0]));
+hexdriver hex1(.val(gpio_out[27:24]), .HEX(HEX1[6:0]));
+hexdriver hex0(.val(gpio_out[31:28]), .HEX(HEX0[6:0]));
 
 
 
