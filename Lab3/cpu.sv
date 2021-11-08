@@ -11,7 +11,7 @@ module cpu (
 logic   [31:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
-logic   [31:0]  instruction_mem [31:0]; //4096 x 32
+logic   [31:0]  instruction_mem [63:0]; //4096 x 32
 logic   [4: 0]  regdest_WB;
 logic   [31:0]  writedata_WB;
 logic   [31:0]  gpio_in_WB;
@@ -59,6 +59,7 @@ instruction_decode decoder (
     .rs1        (rs1_EX),
     .rs2        (rs2_EX),
     .rd         (rd_EX),
+    .csr        (csr),
     .funct3     (funct3_EX),
     .immI       (imm12_EX),
     .immU       (imm20_EX),
@@ -72,8 +73,6 @@ control_unit cu (
     .immI       (imm12_EX),
     .immU       (imm20_EX),
     .inst_type  (inst_type),
-    .csr        (csr)
-
     .aluop      (aluop),
     .alusrc     (alusrc_EX),
     .regsel     (regsel_EX),
@@ -101,7 +100,7 @@ alu alu (
 );
 
 initial begin
-    $readmemh("hexcode.txt", instruction_mem); //readmemh always in initial
+    $readmemh("bin2dec.txt", instruction_mem); //readmemh always in initial
 end
 
 always_ff @(posedge clk, posedge reset) begin

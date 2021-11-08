@@ -1,5 +1,4 @@
 //all combinational
-//TODO csrrw
 
 module control_unit (
     input   logic	[6:0]   funct7,
@@ -62,10 +61,14 @@ always_comb begin
         //sra
         else if ((funct7 == 7'h20) && (funct3 == 3'b101))
             aluop = 4'b1010;
+        else
+            aluop = 4'b1101;
     end
 
     //csrrw
     else if (inst_type == 2'b11) begin
+        alusrc = 1'b0;
+        aluop = 4'b1101;
         if(immI == 12'hf00) begin //switches
             regsel = 2'b00;
         end
@@ -74,6 +77,8 @@ always_comb begin
             regsel = 2'b00;
             regwrite = 1'b0;
         end
+        else
+            aluop = 4'b1101;
     end
 
     //I-type insts
@@ -94,23 +99,28 @@ always_comb begin
         //slli
         else if (funct3 == 3'b001)
             aluop = 4'b1000;
-             //TODO handle shamt from imm12
         //srai
         else if (funct3 == 3'b101 && funct7 == 7'b0100000)
             aluop = 4'b1011;
-            //TODO handle shamt from imm12
         //srli
         else if (funct3 == 3'b101 && funct7 == 7'b0000000)
             aluop = 4'b1001;
-             //TODO handle shamt from imm12
+        else
+            aluop = 4'b1101;
     end
 
     //U-type insts
     else if (inst_type == 2'b10) begin
+        alusrc = 1'b0;
+        aluop = 4'b1101;
         regsel = 2'b01;
         //lui - bypasses ALU
     end
 
+    else begin
+        aluop = 4'b1101;
+        alusrc = 1'b0;
+    end
 end
 
 endmodule
