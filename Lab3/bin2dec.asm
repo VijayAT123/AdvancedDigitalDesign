@@ -2,7 +2,7 @@
 	li		s5, 429496730		#const for 0.1 into x21 (s5) (32,32)
 	li		s6, 10
 
-	li 		s0, 76543210		#test value			
+	li 		s0, 87654321		#test value			
 	#csrrw	s0, 0xf00, zero		#read in from SW register (0xf00) and write to s0
 
 	# 8 iterations for 8 7-segs
