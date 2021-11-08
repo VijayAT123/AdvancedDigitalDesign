@@ -10,6 +10,7 @@ module instruction_decode (
     output	logic	[11:0]  immI,
     output  logic	[19:0]  immU,
     output  logic	[6:0]   opcode,
+    output  logic   [11:0]  csr,
 
     output  logic	[2:0]   inst_type
 );
@@ -22,6 +23,7 @@ module instruction_decode (
     assign rs1 = inst[19:15];
     assign funct3 = inst[14:12];
     assign rd = inst[11:7];
+    assign csr = inst[31:20];
 
     //I-type
     assign immI = inst[31:20]; //sign extension to 32 bits with leqading inst bit(bit 31) as sign bit
@@ -38,6 +40,8 @@ module instruction_decode (
             inst_type = 2'b10; //U-type inst is 10
         else if (opcode == 7'b1110011)
             inst_type = 2'b11; //CSRRW inst is 11
+        else
+            inst_type = 3'b100;
     end
 
 endmodule

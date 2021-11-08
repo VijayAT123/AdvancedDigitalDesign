@@ -35,6 +35,8 @@ module hexdriver (input [3:0] val, output logic [6:0] HEX);
 			HEX = 7'b0000110;
 		else if (val == 4'b1111) //all switches on; f
 			HEX = 7'b0001110;
+		else
+			HEX = 7'b1111111;//turns off all segs
 	end
 
 endmodule 

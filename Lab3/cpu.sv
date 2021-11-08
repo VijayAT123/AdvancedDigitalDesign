@@ -26,7 +26,7 @@ logic   [11:0]  imm12_EX;
 logic   [19:0]  imm20_EX;
 logic   [19:0]  imm20_WB;
 logic   [6: 0]  opcode_EX;
-logic   [3: 0]  csr;
+logic   [11:0]  csr;
 
 
 ///////CONTROL UNIT//////
@@ -72,6 +72,7 @@ control_unit cu (
     .immI       (imm12_EX),
     .immU       (imm20_EX),
     .inst_type  (inst_type),
+    .csr        (csr)
 
     .aluop      (aluop),
     .alusrc     (alusrc_EX),
@@ -123,6 +124,8 @@ always_comb begin
         writedata_WB <= {imm20_WB, 12'b0}; //cat 12 0s to make 32 bits in length
     else if(regsel_WB == 2'b10)
         writedata_WB <= r_WB;
+    else 
+        writedata_WB <= 1'b0;
 end
 
 //rs2 MUX
@@ -159,7 +162,5 @@ end
 always_ff @ (posedge clk) begin
     regdest_WB <= rd_EX; 
 end
-always_ff @ (posedge clk) begin
-    regsel_WB <= regsel_EX;
-end
+
 endmodule
