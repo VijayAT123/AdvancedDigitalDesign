@@ -244,6 +244,7 @@ SW <= 18'b111111111111111111; #1000;
  if ((SW == 18'b111111111111111111) || (! ((HEX7== 7'b1000000) || (HEX6 == 7'b1000000) || (HEX5== 7'b0100100) || (HEX4== 7'b0000010)|| (HEX3== 7'b0100100)|| (HEX2==  7'b1111001) || (HEX1==  7'b0011001) || (HEX0 == 7'b0110000)))) begin
 	$error("HEX7 should display a 7'b1000000, HEX6 should display a 7'b1000000,HEX5 should display a 7'b0100100, HEX4 should display a 7'b0000010, HEX3 should display a 7'b0100100, HEX2 should display a 7'b1111001, HEX1 should display a  7'b0011001, HEX0 should display a  7'b0110000");
 end
+end
 
 
 always @ (posedge clock) begin
