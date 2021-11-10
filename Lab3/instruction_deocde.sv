@@ -1,5 +1,6 @@
 module instruction_decode ( 
-    input   logic   [31:0] inst, 
+    input   logic   [31:0]  inst,
+    input   logic   [31:0]  prog_counter,
     
     //still output funct7, imm, etc. and later choose to use field based on instruction type
     output	logic	[6:0]   funct7,
@@ -11,6 +12,8 @@ module instruction_decode (
     output  logic	[19:0]  immU,
     output  logic	[6:0]   opcode,
     output  logic   [11:0]  csr,
+    output  logic   [12:0]  offsetB,
+    output  logic   [31:0]  branch_addr,  //TODO confirm width; PC_EX is 32 bits long
 
     output  logic	[2:0]   inst_type
 );
@@ -29,19 +32,26 @@ module instruction_decode (
     assign immI = inst[31:20]; //sign extension to 32 bits with leqading inst bit(bit 31) as sign bit
 
     //U-type
-    assign immU = {inst[31:12]}; 
+    assign immU = {inst[31:12]};
+
+    //B-type
+    assign offsetB = {inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};
+    assign branch_addr = prog_counter + {offsetB[12], offsetB[12:2]};
+
 
     always_comb begin
         if (opcode == 7'b0110011) 
-            inst_type = 2'b00; //R-type inst is 00
+            inst_type = 3'b000; //R-type inst is 00
         else if (opcode == 7'b0010011)
-            inst_type = 2'b01; //I-type inst is 01
+            inst_type = 3'b001; //I-type inst is 01
         else if (opcode == 7'b0110111)
-            inst_type = 2'b10; //U-type inst is 10
+            inst_type = 3'b010; //U-type inst is 10
         else if (opcode == 7'b1110011)
-            inst_type = 2'b11; //CSRRW inst is 11
-        else
+            inst_type = 3'b011; //CSRRW inst is 11
+        else if (opcode == 7'b1100011) //B-type inst is 100
             inst_type = 3'b100;
+        else
+            inst_type = 3'b111;
     end
 
 endmodule

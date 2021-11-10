@@ -1,3 +1,5 @@
+
+
 module cpu (
     input   logic   [0: 0]  clk,
     input   logic   [0: 0]  reset,
@@ -9,6 +11,7 @@ module cpu (
 ////////CPU////////
 
 logic   [31:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
+logic   [31:0]  prog_counter_EX;
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
 logic   [31:0]  instruction_mem [63:0]; //4096 x 32
@@ -27,6 +30,10 @@ logic   [19:0]  imm20_EX;
 logic   [19:0]  imm20_WB;
 logic   [6: 0]  opcode_EX;
 logic   [11:0]  csr;
+logic   [12:0]  offsetB_EX;
+logic   [31:0]  branch_addr_EX;
+logic           jal_addr,  //TODO determine width
+logic           jalr_addr, //TODO determine width
 
 
 ///////CONTROL UNIT//////
@@ -36,6 +43,9 @@ logic   [1: 0]   regsel_EX;
 logic   [1: 0]   regsel_WB;
 logic   [0: 0]   regwrite_EX;
 logic   [0: 0]   gpio_we; 
+logic            stall_EX;  //TODO determine width
+logic            stall_F;   //TODO determine width
+logic            pc_src_EX; //TODO determine width
 
 
 ///////REGISTER///////
@@ -54,17 +64,20 @@ assign  a_EX =   readdata1_EX;
 
 
 instruction_decode decoder (
-    .inst       (instruction_EX),
-    .funct7     (funct7_EX),
-    .rs1        (rs1_EX),
-    .rs2        (rs2_EX),
-    .rd         (rd_EX),
-    .csr        (csr),
-    .funct3     (funct3_EX),
-    .immI       (imm12_EX),
-    .immU       (imm20_EX),
-    .opcode     (opcode_EX),
-    .inst_type  (inst_type)
+    .inst           (instruction_EX),
+    .prog_counter   (prog_counter_EX),
+    .funct7         (funct7_EX),
+    .rs1            (rs1_EX),
+    .rs2            (rs2_EX),
+    .rd             (rd_EX),
+    .csr            (csr),
+    .funct3         (funct3_EX),
+    .immI           (imm12_EX),
+    .immU           (imm20_EX),
+    .opcode         (opcode_EX),
+    .offsetB        (offsetB_EX),
+    .branch_addr    (branch_addr_EX),
+    .inst_type      (inst_type)
 );
 
 control_unit cu (
@@ -72,12 +85,15 @@ control_unit cu (
     .funct3     (funct3_EX),
     .immI       (imm12_EX),
     .immU       (imm20_EX),
+    .stall_EX   (stall_EX),
+    .stall_F    (stall_F),
     .inst_type  (inst_type),
     .aluop      (aluop),
     .alusrc     (alusrc_EX),
     .regsel     (regsel_EX),
     .regwrite   (regwrite_EX),
-    .gpio_we    (gpio_we)
+    .gpio_we    (gpio_we),
+    .pc_src     (pc_src_EX)
 );
 
 regfile register (
@@ -153,13 +169,20 @@ end
 always_ff @ (posedge clk) begin
     imm20_WB <= imm20_EX;
 end
+
 //r_ex -> r_wb register
 always_ff @ (posedge clk) begin
     r_WB <= r_EX;
 end
+
 //regdest_wb register
 always_ff @ (posedge clk) begin
     regdest_WB <= rd_EX; 
+end
+
+//stall_EX <= stall_F register
+always @ (posedge clk) begin
+    stall_EX <= stall_F;
 end
 
 endmodule
