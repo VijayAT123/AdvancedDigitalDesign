@@ -5,14 +5,19 @@ module control_unit (
     input	logic	[2:0]   funct3,
     input   logic	[11:0]  immI,
     input  	logic	[19:0]  immU,
+    input   logic           stall_EX,  //TODO determine width
     input  	logic	[2:0]   inst_type,
 
     output 	logic	[3:0]   aluop,
     output	logic	[0:0]   alusrc,
     output 	logic	[1:0]   regsel,
     output 	logic	[0:0]   regwrite,
-    output 	logic	[0:0]   gpio_we    
+    output 	logic	[0:0]   gpio_we,
+    output  logic   [0:0]   pc_src,
+    output  logic           stall_F  //TODO determine width
 );
+
+
 
 always_comb begin 
     regwrite = 1'b1;     //except for csrrw HEX
@@ -20,7 +25,7 @@ always_comb begin
     regsel = 2'b10;      //exceot fir csrrw and lui
 
     //R-Type insts
-    if(inst_type == 2'b00) begin 
+    if(inst_type == 2'b000) begin 
         alusrc = 1'b0;
         //add
         if ((funct7 == 7'h0) && (funct3 == 3'b000))
@@ -66,7 +71,7 @@ always_comb begin
     end
 
     //csrrw
-    else if (inst_type == 2'b11) begin
+    else if (inst_type == 3'b011) begin
         alusrc = 1'b0;
         aluop = 4'b1101;
         if(immI == 12'hf00) begin //switches
@@ -82,7 +87,7 @@ always_comb begin
     end
 
     //I-type insts
-    else if (inst_type == 01) begin
+    else if (inst_type == 3'b001) begin
         alusrc = 1'b1;
         //addi
         if (funct3 == 3'b000)
@@ -110,11 +115,36 @@ always_comb begin
     end
 
     //U-type insts
-    else if (inst_type == 2'b10) begin
+    else if (inst_type == 3'b010) begin
         alusrc = 1'b0;
         aluop = 4'b1101;
         regsel = 2'b01;
         //lui - bypasses ALU
+    end
+
+    //B-type insts
+    else if (inst_type == 3'b100) begin
+        //TODO alusrc
+        //TODO regsel
+        //TODO regwrite
+        //TODO gpio_we
+        //beq
+        if (funct3 == 00) 
+            aluop = 4'b0100;
+        //bge
+        else if (funct3 == 101)
+            aluop = 4'b0100;
+        //bgeu
+        else if (funct3 == //TODO)
+            aluop = //TODO
+        //blt
+        else if (funct3 == 100)
+            aluop = 4'b1100;
+        //bltu
+        else if (funct3 == 110)
+            aluop = 4'b1110;
+        else
+
     end
 
     else begin
