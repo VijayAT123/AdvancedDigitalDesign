@@ -1,6 +1,7 @@
 module instruction_decode ( 
     input   logic   [31:0]  inst,
-    input   logic   [31:0]  prog_counter,
+    input   logic   [11:0]  prog_counter_EX,
+    input   logic   [11:0]  readdata1_EX, 
     
     //still output funct7, imm, etc. and later choose to use field based on instruction type
     output	logic	[6:0]   funct7,
@@ -19,6 +20,9 @@ module instruction_decode (
     output  logic	[2:0]   inst_type
 );
 
+    logic   [12:0]  offsetB;
+    logic   [20:0]  offsetJ;
+    logic   [11:0]  offsetJR;
     assign opcode = inst [6:0];
 
     //R-type
@@ -34,11 +38,16 @@ module instruction_decode (
 
     //U-type
     assign immU = {inst[31:12]};
-
+ 
     //B-type
-    assign offsetB = {inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};
-    assign branch_addr = prog_counter + {offsetB[12], offsetB[12:2]};
+    assign offsetB = {inst[31], inst[7], inst[30:25], inst[11:8], 1'b0};    
+    assign branch_addr = prog_counter_EX + {offsetB[12], offsetB[12:2]};    //must be sign extended; couldnt go backwards with auto zero-extension
 
+    //J-type
+    assign offsetJ = {inst[31], inst[19:12], inst[20], inst[30:21], 1'b0};  
+    assign jal_addr = prog_counter_EX + offsetJ[13:2];
+    assign offsetJR = inst[31:20];
+    assign jalr_addr = readdata1_EX[13:2] + {{2{offsetJR[11]}}, offsetJR[11:2]};
 
     always_comb begin
         if (opcode == 7'b0110011) 
