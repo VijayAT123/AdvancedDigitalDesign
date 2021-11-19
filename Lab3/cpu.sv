@@ -10,8 +10,8 @@ module cpu (
 
 ////////CPU////////
 
-logic   [31:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
-logic   [31:0]  prog_counter_EX;
+logic   [11:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
+logic   [11:0]  prog_counter_EX;
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
 logic   [31:0]  instruction_mem [63:0]; //4096 x 32
@@ -45,7 +45,7 @@ logic   [0: 0]   regwrite_EX;
 logic   [0: 0]   gpio_we; 
 logic            stall_EX;  //TODO determine width
 logic            stall_F;   //TODO determine width
-logic            pc_src_EX; //TODO determine width
+logic   [2: 0]    pc_src_EX;
 
 
 ///////REGISTER///////
