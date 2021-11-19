@@ -14,7 +14,8 @@ module instruction_decode (
     output  logic   [11:0]  csr,
     output  logic   [12:0]  offsetB,
     output  logic   [31:0]  branch_addr,  //TODO confirm width; PC_EX is 32 bits long
-
+    output  logic   [31:0]  jal_addr,
+    output  logic   [31:0]  jalr_addr,
     output  logic	[2:0]   inst_type
 );
 

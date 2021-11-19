@@ -32,8 +32,8 @@ logic   [6: 0]  opcode_EX;
 logic   [11:0]  csr;
 logic   [12:0]  offsetB_EX;
 logic   [31:0]  branch_addr_EX;
-logic           jal_addr,  //TODO determine width
-logic           jalr_addr, //TODO determine width
+logic   [31:0]  jal_addr_EX,  //TODO determine width
+logic   [31:0]  jalr_addr_EX, //TODO determine width
 
 
 ///////CONTROL UNIT//////
@@ -77,6 +77,8 @@ instruction_decode decoder (
     .opcode         (opcode_EX),
     .offsetB        (offsetB_EX),
     .branch_addr    (branch_addr_EX),
+    .jal_addr       (jal_addr_EX),
+    .jalr_addr      (jal_addr_EX),
     .inst_type      (inst_type)
 );
 
@@ -128,6 +130,22 @@ always_ff @(posedge clk, posedge reset) begin
         instruction_EX <= instruction_mem[prog_counter_F];
         prog_counter_F <= prog_counter_F + 1'b1;
     end
+end
+
+//TODO make sure correct
+//PC MUX with pc_src_EX as selector
+always_comb begin
+    if(pc_src_EX == 000)
+        //TODO PC_F or PC_EX
+    else if (pc_src_EX == 001)
+        prog_counter_EX = branch_addr_EX;
+    else if (pc_src_EX == 010)
+        prog_counter_EX = jal_addr_EX;
+    else if (pc_src_EX == 011)
+        prog_counter_EX = jalr_addr_EX;
+    else
+    
+        prog_counter_EX = 1'b0;
 end
 
 
