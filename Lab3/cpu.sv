@@ -30,22 +30,21 @@ logic   [19:0]  imm20_EX;
 logic   [19:0]  imm20_WB;
 logic   [6: 0]  opcode_EX;
 logic   [11:0]  csr;
-logic   [12:0]  offsetB_EX;
-logic   [31:0]  branch_addr_EX;
-logic   [31:0]  jal_addr_EX,  //TODO determine width
-logic   [31:0]  jalr_addr_EX, //TODO determine width
+logic   [11:0]  branch_addr_EX;
+logic   [11:0]  jal_addr_EX,
+logic   [11:0]  jalr_addr_EX,
 
 
 ///////CONTROL UNIT//////
-logic   [3: 0]   aluop;
-logic   [0: 0]   alusrc_EX;
-logic   [1: 0]   regsel_EX;
-logic   [1: 0]   regsel_WB;
-logic   [0: 0]   regwrite_EX;
-logic   [0: 0]   gpio_we; 
-logic            stall_EX;  //TODO determine width
-logic            stall_F;   //TODO determine width
-logic   [2: 0]    pc_src_EX;
+logic   [3: 0]  aluop;
+logic   [0: 0]  alusrc_EX;
+logic   [1: 0]  regsel_EX;
+logic   [1: 0]  regsel_WB;
+logic   [0: 0]  regwrite_EX;
+logic   [0: 0]  gpio_we; 
+logic   [0: 0]  stall_EX;
+logic   [0: 0]  stall_F;
+logic   [2: 0]  pc_src_EX;
 
 
 ///////REGISTER///////
@@ -75,7 +74,6 @@ instruction_decode decoder (
     .immI           (imm12_EX),
     .immU           (imm20_EX),
     .opcode         (opcode_EX),
-    .offsetB        (offsetB_EX),
     .branch_addr    (branch_addr_EX),
     .jal_addr       (jal_addr_EX),
     .jalr_addr      (jal_addr_EX),
@@ -91,6 +89,7 @@ control_unit cu (
     .stall_F    (stall_F),
     .inst_type  (inst_type),
     .aluop      (aluop),
+    .aluR       (r_EX)
     .alusrc     (alusrc_EX),
     .regsel     (regsel_EX),
     .regwrite   (regwrite_EX),
@@ -135,16 +134,15 @@ end
 //TODO make sure correct
 //PC MUX with pc_src_EX as selector
 always_comb begin
-    if(pc_src_EX == 000)
-        //TODO PC_F or PC_EX
+    if(pc_src_EX == 000) 
+        prog_counter_F = prog_counter_F; //TODO increment by 1
     else if (pc_src_EX == 001)
-        prog_counter_EX = branch_addr_EX;
+        prog_counter_F = branch_addr_EX;
     else if (pc_src_EX == 010)
-        prog_counter_EX = jal_addr_EX;
+        prog_counter_F = jal_addr_EX;
     else if (pc_src_EX == 011)
-        prog_counter_EX = jalr_addr_EX;
+        prog_counter_F = jalr_addr_EX;
     else
-    
         prog_counter_EX = 1'b0;
 end
 
@@ -157,6 +155,8 @@ always_comb begin
         writedata_WB <= {imm20_WB, 12'b0}; //cat 12 0s to make 32 bits in length
     else if(regsel_WB == 2'b10)
         writedata_WB <= r_WB;
+    else if(regsel_WB == 2'b11)
+        writedata_WB = prog_counter_F;
     else 
         writedata_WB <= 1'b0;
 end
