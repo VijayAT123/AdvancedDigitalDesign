@@ -59,6 +59,10 @@ module instruction_decode (
             inst_type = 3'b011; //CSRRW inst is 11
         else if (opcode == 7'b1100011) //B-type inst is 100
             inst_type = 3'b100;
+        else if (opcode == 7'b1101111) //JAL
+            inst_type = 3'b101;
+        else if (opcode == 7'b1100111) //JALR
+            inst_type = 3'b110;
         else
             inst_type = 3'b111;
     end

@@ -1,17 +1,15 @@
 //all combinational
 
-//TODO add pcsrc for b
-//TODO add pcsrc for jal
-//TODO add pcsrc for jalr
 //TODO determine branch conditions
 module control_unit (
     input   logic	[6:0]   funct7,
     input	logic	[2:0]   funct3,
     input   logic	[11:0]  immI,
     input  	logic	[19:0]  immU,
-    input   logic           stall_EX,  //TODO determine width
+    input   logic           stall_EX,
     input  	logic	[2:0]   inst_type,
     input   logic   [31:0]  aluR,
+    input   logic           zero
 
     output 	logic	[3:0]   aluop,
     output	logic	[0:0]   alusrc,
@@ -19,13 +17,12 @@ module control_unit (
     output 	logic	[0:0]   regwrite,
     output 	logic	[0:0]   gpio_we,
     output  logic   [2:0]   pc_src,
-    output  logic           stall_F  //TODO determine width
+    output  logic           stall_F
 );
 
 if (stall_EX) begin
     gpio_we = 0;
     regwrite = 0;
-    regsel = 
 end
 
 else begin
@@ -121,6 +118,8 @@ else begin
             //srli
             else if (funct3 == 3'b101 && funct7 == 7'b0000000)
                 aluop = 4'b1001;
+            //jalr - has I-type opcode
+            else if (funct3 == 3'b000 && funct7 == )
             else
                 aluop = 4'b1101;
         end
@@ -141,35 +140,35 @@ else begin
             //beq
             if (funct3 == 00) begin
                 aluop = 4'b0100;
-                if(aluR == 32'b0)
+                if(aluR == 32'b0 && zero)
                     pc_src = 2'b01;
             end
             //bge
-            else if (funct3 == 101) begin
+            else if (funct3 == 101 && zero) begin
                 aluop = 4'b1100;
                 if(aluR == 32'b0)
                     pc_src = 2'b01;
             end
             //bgeu
-            else if (funct3 == 111 ) begin
+            else if (funct3 == 111 && zero) begin
                 aluop = 4'b1110;
                 if(aluR == 32'b0)
                     pc_src = 2'b01;
             end
             //blt
-            else if (funct3 == 100) begin
+            else if (funct3 == 100 && !zero) begin
                 aluop = 4'b1100;
                 if(aluR == 32'b1)
                     pc_src = 2'b01;
             end
             //bltu
-            else if (funct3 == 110) begin
+            else if (funct3 == 110 && !zero) begin
                 aluop = 4'b1110;
                 if(aluR == 32'b1)
                     pc_src = 2'b01;
             end
             //bne
-            else if (funct3 == 001) begin
+            else if (funct3 == 001 && !zero) begin
                 aluop = 4'b0100;
                 if(aluR != 32'b0)
                     pc_src = 2'b01;
@@ -178,7 +177,15 @@ else begin
                 aluop = 4'b1101;
         end
 
-        //TODO J-type insts
+        //JAL
+        else if (inst_type == 3'b101) begin
+            pc_src = 2'b10
+        end
+
+        //JALR
+        else if (inst_type == 3'b110) begin
+            pc_src = 2'b11;
+        end
 
         else begin
             aluop = 4'b1101;

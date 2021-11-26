@@ -58,6 +58,7 @@ logic   [31:0]   a_EX;
 logic   [31:0]   b_EX;
 logic	[31:0]	 r_EX;
 logic	[31:0]	 r_WB;
+logic            zero;
 assign  a_EX =   readdata1_EX;
 
 
@@ -87,6 +88,7 @@ control_unit cu (
     .immU       (imm20_EX),
     .stall_EX   (stall_EX),
     .stall_F    (stall_F),
+    .zero       (zero),
     .inst_type  (inst_type),
     .aluop      (aluop),
     .aluR       (r_EX)
@@ -113,7 +115,8 @@ alu alu (
     .A          (a_EX),
 	.B          (b_EX),
 	.op         (aluop),
-	.R          (r_EX)
+	.R          (r_EX),
+    .zero       (zero)
 );
 
 initial begin
