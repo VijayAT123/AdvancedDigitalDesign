@@ -9,7 +9,7 @@ module control_unit (
     input   logic           stall_EX,
     input  	logic	[2:0]   inst_type,
     input   logic   [31:0]  aluR,
-    input   logic           zero
+    input   logic           zero,
 
     output 	logic	[3:0]   aluop,
     output	logic	[0:0]   alusrc,
@@ -20,21 +20,23 @@ module control_unit (
     output  logic           stall_F
 );
 
-if (stall_EX) begin
-    gpio_we = 0;
-    regwrite = 0;
-end
+always_comb begin
 
-else begin
+    if (stall_EX) begin
+        gpio_we = 0;
+        regwrite = 0;
+    end
 
-    always_comb begin 
+    else begin
         regwrite = 1'b1;     //except for csrrw HEX
         gpio_we = 1'b0;      //except for csrrw HEX
         regsel = 2'b10;      //exceot fir csrrw and lui
 
         //R-Type insts
-        if(inst_type == 2'b000) begin 
+        if(inst_type == 3'b000) begin 
             alusrc = 1'b0;
+            pc_src = 3'b000;
+            stall_F = 0;
             //add
             if ((funct7 == 7'h0) && (funct3 == 3'b000))
                 aluop = 4'b0011;
@@ -82,6 +84,8 @@ else begin
         else if (inst_type == 3'b011) begin
             alusrc = 1'b0;
             aluop = 4'b1101;
+            pc_src = 3'b000;
+            stall_F = 0;
             if(immI == 12'hf00) begin //switches
                 regsel = 2'b00;
             end
@@ -97,6 +101,8 @@ else begin
         //I-type insts
         else if (inst_type == 3'b001) begin
             alusrc = 1'b1;
+            pc_src = 3'b000;
+            stall_F = 0;
             //addi
             if (funct3 == 3'b000)
                 aluop = 4'b0011;
@@ -118,8 +124,6 @@ else begin
             //srli
             else if (funct3 == 3'b101 && funct7 == 7'b0000000)
                 aluop = 4'b1001;
-            //jalr - has I-type opcode
-            else if (funct3 == 3'b000 && funct7 == )
             else
                 aluop = 4'b1101;
         end
@@ -129,6 +133,8 @@ else begin
             alusrc = 1'b0;
             aluop = 4'b1101;
             regsel = 2'b01;
+            pc_src = 3'b000;
+            stall_F = 0;
             //lui - bypasses ALU
         end
 
@@ -137,54 +143,67 @@ else begin
             //TODO alusrc
             //TODO regsel
             //TODO regwrite
+            //pc_src = 3'b001;
             //beq
-            if (funct3 == 00) begin
+            stall_F = 0;
+            if (funct3 == 3'b000) begin
                 aluop = 4'b0100;
-                if(aluR == 32'b0 && zero)
-                    pc_src = 2'b01;
-            end
-            //bge
-            else if (funct3 == 101 && zero) begin
-                aluop = 4'b1100;
+                stall_F = 1;
                 if(aluR == 32'b0)
-                    pc_src = 2'b01;
-            end
-            //bgeu
-            else if (funct3 == 111 && zero) begin
-                aluop = 4'b1110;
-                if(aluR == 32'b0)
-                    pc_src = 2'b01;
-            end
-            //blt
-            else if (funct3 == 100 && !zero) begin
-                aluop = 4'b1100;
-                if(aluR == 32'b1)
-                    pc_src = 2'b01;
-            end
-            //bltu
-            else if (funct3 == 110 && !zero) begin
-                aluop = 4'b1110;
-                if(aluR == 32'b1)
-                    pc_src = 2'b01;
+                    pc_src = 3'b001;
             end
             //bne
-            else if (funct3 == 001 && !zero) begin
+            else if (funct3 == 3'b001) begin
                 aluop = 4'b0100;
-                if(aluR != 32'b0)
-                    pc_src = 2'b01;
+                stall_F = 1;
+                pc_src = 3'b001;
+                if(aluR != 0) begin
+                    pc_src = 3'b001;
+                end
             end
+            //bge
+            else if (funct3 == 3'b101) begin
+                aluop = 4'b1100;
+                stall_F = 1;
+                if(aluR == 32'b0)
+                    pc_src = 3'b001;
+            end
+            //bgeu
+            else if (funct3 == 3'b111) begin
+                aluop = 4'b1110;
+                stall_F = 1;
+                if(aluR == 32'b0)
+                    pc_src = 3'b001;
+            end
+            //blt
+            else if (funct3 == 3'b100) begin
+                aluop = 4'b1100;
+                stall_F = 1;
+                if(aluR == 32'b1)
+                    pc_src = 3'b001;
+            end
+            //bltu
+            else if (funct3 == 3'b110) begin
+                aluop = 4'b1110;
+                stall_F = 1;
+                if(aluR == 32'b1)
+                    pc_src = 3'b001;
+            end
+            
             else
                 aluop = 4'b1101;
         end
 
         //JAL
         else if (inst_type == 3'b101) begin
-            pc_src = 2'b10
+            pc_src = 2'b10;
+            stall_F = 1;
         end
 
         //JALR
         else if (inst_type == 3'b110) begin
             pc_src = 2'b11;
+            stall_F = 1;
         end
 
         else begin

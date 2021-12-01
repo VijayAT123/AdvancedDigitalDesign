@@ -1,7 +1,7 @@
 module instruction_decode ( 
     input   logic   [31:0]  inst,
     input   logic   [11:0]  prog_counter_EX,
-    input   logic   [11:0]  readdata1_EX, 
+    input   logic   [31:0]  readdata1_EX, 
     
     //still output funct7, imm, etc. and later choose to use field based on instruction type
     output	logic	[6:0]   funct7,

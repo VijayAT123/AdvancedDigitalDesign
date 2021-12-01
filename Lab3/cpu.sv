@@ -31,8 +31,8 @@ logic   [19:0]  imm20_WB;
 logic   [6: 0]  opcode_EX;
 logic   [11:0]  csr;
 logic   [11:0]  branch_addr_EX;
-logic   [11:0]  jal_addr_EX,
-logic   [11:0]  jalr_addr_EX,
+logic   [11:0]  jal_addr_EX;
+logic   [11:0]  jalr_addr_EX;
 
 
 ///////CONTROL UNIT//////
@@ -65,7 +65,8 @@ assign  a_EX =   readdata1_EX;
 
 instruction_decode decoder (
     .inst           (instruction_EX),
-    .prog_counter   (prog_counter_EX),
+    .prog_counter_EX(prog_counter_EX),
+    .readdata1_EX   (readdata1_EX),
     .funct7         (funct7_EX),
     .rs1            (rs1_EX),
     .rs2            (rs2_EX),
@@ -77,7 +78,7 @@ instruction_decode decoder (
     .opcode         (opcode_EX),
     .branch_addr    (branch_addr_EX),
     .jal_addr       (jal_addr_EX),
-    .jalr_addr      (jal_addr_EX),
+    .jalr_addr      (jalr_addr_EX),
     .inst_type      (inst_type)
 );
 
@@ -91,7 +92,7 @@ control_unit cu (
     .zero       (zero),
     .inst_type  (inst_type),
     .aluop      (aluop),
-    .aluR       (r_EX)
+    .aluR       (r_EX),
     .alusrc     (alusrc_EX),
     .regsel     (regsel_EX),
     .regwrite   (regwrite_EX),
@@ -120,7 +121,7 @@ alu alu (
 );
 
 initial begin
-    $readmemh("bin2dec.txt", instruction_mem); //readmemh always in initial
+    $readmemh("bj_test.txt", instruction_mem); //readmemh always in initial
 end
 
 always_ff @(posedge clk, posedge reset) begin
@@ -130,23 +131,19 @@ always_ff @(posedge clk, posedge reset) begin
     end
     else begin
         instruction_EX <= instruction_mem[prog_counter_F];
-        prog_counter_F <= prog_counter_F + 1'b1;
+        //prog_counter_F <= prog_counter_F + 1'b1;
+        //PC MUX with pc_src_EX as selector
+            if(pc_src_EX == 000) 
+                prog_counter_F <= prog_counter_F + 1'b1;
+            else if (pc_src_EX == 001)
+                prog_counter_F <= branch_addr_EX;
+            else if (pc_src_EX == 010)
+                prog_counter_F <= jal_addr_EX;
+            else if (pc_src_EX == 011)
+                prog_counter_F <= jalr_addr_EX;
+            else
+                prog_counter_F <= 1'b0;
     end
-end
-
-//TODO make sure correct
-//PC MUX with pc_src_EX as selector
-always_comb begin
-    if(pc_src_EX == 000) 
-        prog_counter_F = prog_counter_F; //TODO increment by 1
-    else if (pc_src_EX == 001)
-        prog_counter_F = branch_addr_EX;
-    else if (pc_src_EX == 010)
-        prog_counter_F = jal_addr_EX;
-    else if (pc_src_EX == 011)
-        prog_counter_F = jalr_addr_EX;
-    else
-        prog_counter_EX = 1'b0;
 end
 
 
@@ -202,8 +199,12 @@ always_ff @ (posedge clk) begin
 end
 
 //stall_EX <= stall_F register
-always @ (posedge clk) begin
+always_ff @ (posedge clk) begin
     stall_EX <= stall_F;
+end
+
+always_ff @ (posedge clk) begin
+    prog_counter_EX <= prog_counter_F;
 end
 
 endmodule
