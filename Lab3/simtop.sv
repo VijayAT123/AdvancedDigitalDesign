@@ -79,6 +79,9 @@ initial begin
 	end
 end
 
+//testing for lab4 needs to make sure insts are executed in:
+//0, 1, 2, 3, 4, 8, 9, 10, 9, 10, 11, 12, 13
+
 always_comb begin
 	////SW <= 18'b0; #1000; //0
 	if ((SW ==  18'b0) && (((HEX7!= 7'b1000000) || (HEX6 != 7'b100000) || (HEX5!= 7'b1000000) || (HEX4!= 7'b1000000)|| (HEX3!= 7'b1000000)|| (HEX2!= 7'b1000000) || (HEX1!= 7'b1000000) || (HEX0!= 7'b1000000)))) begin
