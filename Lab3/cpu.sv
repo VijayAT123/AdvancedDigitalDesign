@@ -130,19 +130,20 @@ always_ff @(posedge clk, posedge reset) begin
         prog_counter_F <= 32'b0;
     end
     else begin
-        instruction_EX <= instruction_mem[prog_counter_F];
-        //prog_counter_F <= prog_counter_F + 1'b1;
         //PC MUX with pc_src_EX as selector
-            if(pc_src_EX == 000) 
-                prog_counter_F <= prog_counter_F + 1'b1;
-            else if (pc_src_EX == 001)
-                prog_counter_F <= branch_addr_EX;
-            else if (pc_src_EX == 010)
-                prog_counter_F <= jal_addr_EX;
-            else if (pc_src_EX == 011)
-                prog_counter_F <= jalr_addr_EX;
-            else
-                prog_counter_F <= 1'b0;
+        if(pc_src_EX == 000) 
+            prog_counter_F <= prog_counter_F + 1'b1;
+        else if (pc_src_EX == 001)
+            prog_counter_F <= branch_addr_EX;
+        else if (pc_src_EX == 010)
+            prog_counter_F <= jal_addr_EX;
+        else if (pc_src_EX == 011)
+            prog_counter_F <= jalr_addr_EX;
+        else
+            prog_counter_F <= 1'b0;
+        instruction_EX <= instruction_mem[prog_counter_F];
+       
+            
     end
 end
 

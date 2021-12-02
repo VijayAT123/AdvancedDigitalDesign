@@ -25,12 +25,13 @@ always_comb begin
     if (stall_EX) begin
         gpio_we = 0;
         regwrite = 0;
+        stall_F = 0;
     end
 
     else begin
         regwrite = 1'b1;     //except for csrrw HEX
         gpio_we = 1'b0;      //except for csrrw HEX
-        regsel = 2'b10;      //exceot fir csrrw and lui
+        regsel = 2'b10;      //exceot fir csrrw, lui, JAL, and JALR
 
         //R-Type insts
         if(inst_type == 3'b000) begin 
@@ -102,7 +103,7 @@ always_comb begin
         else if (inst_type == 3'b001) begin
             alusrc = 1'b1;
             pc_src = 3'b000;
-            stall_F = 0;
+           // stall_F = 0;
             //addi
             if (funct3 == 3'b000)
                 aluop = 4'b0011;
@@ -148,46 +149,54 @@ always_comb begin
             stall_F = 0;
             if (funct3 == 3'b000) begin
                 aluop = 4'b0100;
-                stall_F = 1;
-                if(aluR == 32'b0)
+                if(aluR == 32'b0) begin
+                    stall_F = 1;
                     pc_src = 3'b001;
+                end
             end
             //bne
             else if (funct3 == 3'b001) begin
-                aluop = 4'b0100;
-                stall_F = 1;
-                pc_src = 3'b001;
+                aluop = 4'b0100; 
                 if(aluR != 0) begin
-                    pc_src = 3'b001;
+                     stall_F = 1;
+                     pc_src = 3'b001;
                 end
             end
             //bge
             else if (funct3 == 3'b101) begin
                 aluop = 4'b1100;
                 stall_F = 1;
-                if(aluR == 32'b0)
+                if(aluR == 32'b0) begin
+                    stall_F = 1;
                     pc_src = 3'b001;
+                end
             end
             //bgeu
             else if (funct3 == 3'b111) begin
                 aluop = 4'b1110;
                 stall_F = 1;
-                if(aluR == 32'b0)
+                if(aluR == 32'b0) begin
+                    stall_F = 1;
                     pc_src = 3'b001;
+                end
             end
             //blt
             else if (funct3 == 3'b100) begin
                 aluop = 4'b1100;
                 stall_F = 1;
-                if(aluR == 32'b1)
+                if(aluR == 32'b1 ) begin
+                    stall_F = 1;
                     pc_src = 3'b001;
+                end
             end
             //bltu
             else if (funct3 == 3'b110) begin
                 aluop = 4'b1110;
                 stall_F = 1;
-                if(aluR == 32'b1)
+                if(aluR == 32'b1) begin
+                    stall_F = 1;
                     pc_src = 3'b001;
+                end
             end
             
             else
@@ -197,12 +206,16 @@ always_comb begin
         //JAL
         else if (inst_type == 3'b101) begin
             pc_src = 2'b10;
+            //TODO does regsel need to select for JAL 
+            regsel = 2'b11;
             stall_F = 1;
         end
 
         //JALR
         else if (inst_type == 3'b110) begin
             pc_src = 2'b11;
+            //TODO figure out writing PC_F to x1 
+            regsel = 2'b11;
             stall_F = 1;
         end
 
