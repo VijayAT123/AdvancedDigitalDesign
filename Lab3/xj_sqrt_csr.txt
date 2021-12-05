@@ -1,0 +1,75 @@
+ Address    Code        Basic                     Source
+
+0x00400000  0xf0019473  csrrw x8,0x00000f00,x31    csrrw s0, 0xf00, x3
+0x00400004  0x00e41413  slli x8,x8,0x0000000e 6    slli s0 s0 14 # so it wont be 32,14
+0x00400008  0x10000493  addi x9,x0,0x00000100 8    li s1 256 #guess also called x
+0x0040000c  0x08000913  addi x18,x0,0x000000809    li s2 128 #step size also called S
+0x00400010  0x00e49493  slli x9,x9,0x0000000e 11   slli s1, s1, 14 # shift for guess and overwrite in s1
+0x00400014  0x00e91913  slli x18,x18,0x000000012   slli s2, s2, 14 #shift for step and overwrite in s2
+0x00400018  0x029489b3  mul x19,x9,x9         16     mul s3, s1, s1 #x^2 saved in here # mul loo
+0x0040001c  0x0294ba33  mulhu x20,x9,x9       19     mulhu s4, s1, s1 #x^2 for high bits
+0x00400020  0x012a1a13  slli x20,x20,0x000000122     slli s4, s4, 18
+0x00400024  0x00e9d993  srli x19,x19,0x000000025     srli s3, s3, 14
+0x00400028  0x0149ea33  or x20,x19,x20        28     or s4, s3, s4 #store the or into register s4
+0x0040002c  0x028a0463  beq x20,x8,0x00000014 30     beq s4, s0, Clean_Up #If guess equals input number then break and clean up,if exact, exit from psudeo
+0x00400030  0x008a4a63  blt x20,x8,0x0000000a 33     blt s4,s0 Step_Up #val < 0 check if so step = step+1,otherwise add if step to low
+0x00400034  0x01444c63  blt x8,x20,0x0000000c 34     bgt s4,s0 Step_Down #jump to step = step-1, subtract step if too high
+0x00400038  0x00195913  srli x18,x18,0x000000037     srli s2, s2, 1 # divide by two
+0x0040003c  0x00090c63  beq x18,x0,0x0000000c 38     beqz s2, Clean_Up #stop condition
+0x00400040  0xfd9ff06f  jal x0,0xffffffec     39     b loop #End of loop function, go back up to top
+0x00400044  0x012484b3  add x9,x9,x18         42     add s1, s1, s2 # add step + guess and overwrite guess(s1)
+0x00400048  0xff1ff06f  jal x0,0xfffffff8     43     b decrement
+0x0040004c  0x412484b3  sub x9,x9,x18         46     sub s1, s1, s2 #Subtract by subtracting step by guess
+0x00400050  0xfe9ff06f  jal x0,0xfffffff4     47     b decrement
+0x00400054  0x00900533  add x10,x0,x9         52     mv a0, s1 #Prep the PrintInt syscall with our value
+0x00400058  0x1999abb7  lui x23,0x0001999a    55   li s7, 429496730 #2^32 / 10 to represent 0.1
+0x0040005c  0x99ab8b93  addi x23,x23,0xfffff99     
+0x00400060  0x00a00b13  addi x22,x0,0x0000000a56   li s6, 10 #load the 10
+0x00400064  0x00a00433  add x8,x0,x10         58   mv s0, a0 # a0 is the final destination of the sqrt value
+0x00400068  0x00018fb7  lui x31,0x00000018    59   li t6 100000
+0x0040006c  0x6a0f8f93  addi x31,x31,0x000006a     
+0x00400070  0x03f40f33  mul x30,x8,x31        61   mul t5 s0 t6
+0x00400074  0x03f43eb3  mulhu x29,x8,x31      62   mulhu t4 s0 t6
+0x00400078  0x012e9e93  slli x29,x29,0x000000164   slli t4 t4 18
+0x0040007c  0x00ef5f13  srli x30,x30,0x000000065   srli t5 t5 14
+0x00400080  0x01eee433  or x8,x29,x30         66   or s0 t4 t5
+0x00400084  0x037404b3  mul x9,x8,x23         73   mul s1,s0,s7 #multiply lower bits by 0.1
+0x00400088  0x028b9433  mulh x8,x23,x8        75   mulh s0, s7, s0 #multiply upper bits by 0.1
+0x0040008c  0x029b39b3  mulhu x19,x22,x9      78   mulhu s3, s6, s1
+0x00400090  0x01300a33  add x20,x0,x19        81   mv s4, s3
+0x00400094  0x028b84b3  mul x9,x23,x8         85   mul s1, s7 , s0 #multiply lower bits by 0.1
+0x00400098  0x028b9433  mulh x8,x23,x8        87   mulh s0, s7, s0 #multiply upper bits by 0.1
+0x0040009c  0x029b39b3  mulhu x19,x22,x9      90   mulhu s3, s6, s1
+0x004000a0  0x004a1a13  slli x20,x20,0x000000093   slli    s4 ,s4, 4
+0x004000a4  0x013a6a33  or x20,x20,x19        94   or      s4, s4, s3
+0x004000a8  0x028b84b3  mul x9,x23,x8         97   mul s1, s7 , s0 #multiply lower bits by 0.1
+0x004000ac  0x028b9433  mulh x8,x23,x8        99   mulh s0, s7, s0 #multiply upper bits by 0.1
+0x004000b0  0x029b39b3  mulhu x19,x22,x9      102  mulhu s3, s6, s1
+0x004000b4  0x004a1a13  slli x20,x20,0x0000000105  slli    s4 ,s4, 4
+0x004000b8  0x013a6a33  or x20,x20,x19        106  or      s4, s4, s3
+0x004000bc  0x028b84b3  mul x9,x23,x8         109  mul s1, s7 , s0 #multiply lower bits by 0.1
+0x004000c0  0x028b9433  mulh x8,x23,x8        111  mulh s0, s7, s0 #multiply upper bits by 0.1
+0x004000c4  0x029b39b3  mulhu x19,x22,x9      114  mulhu s3, s6, s1
+0x004000c8  0x004a1a13  slli x20,x20,0x0000000117  slli    s4 ,s4, 4
+0x004000cc  0x013a6a33  or x20,x20,x19        118  or      s4, s4, s3
+0x004000d0  0x028b84b3  mul x9,x23,x8         121  mul s1, s7 , s0 #multiply lower bits by 0.1
+0x004000d4  0x028b9433  mulh x8,x23,x8        123  mulh s0, s7, s0 #multiply upper bits by 0.1
+0x004000d8  0x029b39b3  mulhu x19,x22,x9      126  mulhu s3, s6, s1
+0x004000dc  0x004a1a13  slli x20,x20,0x0000000129  slli    s4 ,s4, 4
+0x004000e0  0x013a6a33  or x20,x20,x19        130  or      s4, s4, s3
+0x004000e4  0x028b84b3  mul x9,x23,x8         133  mul s1, s7 , s0 #multiply lower bits by 0.1
+0x004000e8  0x028b9433  mulh x8,x23,x8        135  mulh s0, s7, s0 #multiply upper bits by 0.1
+0x004000ec  0x029b39b3  mulhu x19,x22,x9      138  mulhu s3, s6, s1
+0x004000f0  0x004a1a13  slli x20,x20,0x0000000141  slli    s4 ,s4, 4
+0x004000f4  0x013a6a33  or x20,x20,x19        142  or      s4, s4, s3
+0x004000f8  0x028b84b3  mul x9,x23,x8         145  mul s1, s7 , s0 #multiply lower bits by 0.1
+0x004000fc  0x028b9433  mulh x8,x23,x8        147  mulh s0, s7, s0 #multiply upper bits by 0.1
+0x00400100  0x029b39b3  mulhu x19,x22,x9      150  mulhu s3, s6, s1
+0x00400104  0x004a1a13  slli x20,x20,0x0000000153  slli    s4 ,s4, 4
+0x00400108  0x013a6a33  or x20,x20,x19        154  or      s4, s4, s3
+0x0040010c  0x028b84b3  mul x9,x23,x8         157  mul s1, s7 , s0 #multiply lower bits by 0.1
+0x00400110  0x028b9433  mulh x8,x23,x8        159  mulh s0, s7, s0 #multiply upper bits by 0.1
+0x00400114  0x029b39b3  mulhu x19,x22,x9      162  mulhu s3, s6, s1
+0x00400118  0x004a1a13  slli x20,x20,0x0000000165  slli    s4 ,s4, 4
+0x0040011c  0x013a6a33  or x20,x20,x19        166  or      s4, s4, s3
+0x00400120  0xf02a1a73  csrrw x20,0x00000f02,x168  csrrw x20, 0xf02, s4 #Output results of s5 onto the display and overwrite a0 with returned 0 from write-only CSR
