@@ -67,16 +67,16 @@ initial begin
 	reset = 1; #20; reset = 0;
 	clock = 0;
 	
-	SW <= 18'b111111111111111111; #1000; //262143
+	SW <= 18'b111111111111111111;  //###1000; //262143
 
-	reset = 1; #20; reset = 0;
+	//reset = 1; #20; reset = 0;
 
-	for (int i = 1; i <= 18'b111111111111111111; ++i) begin
-		SW <= i;
-		#980;
-		reset = 1; # 20;
-		reset = 0;
-	end
+	// for (int i = 1; i <= 18'b111111111111111111; ++i) begin
+	// 	SW <= i;
+	// 	#980;
+	// 	reset = 1; # 20;
+	// 	reset = 0;
+	// end
 end
 
 //testing for lab4 needs to make sure insts are executed in:
