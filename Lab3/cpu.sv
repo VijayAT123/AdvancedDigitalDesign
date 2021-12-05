@@ -14,7 +14,7 @@ logic   [11:0]  prog_counter_F; //12 bit wide to match #rows in instruction_mem
 logic   [11:0]  prog_counter_EX;
 logic   [2: 0]  inst_type;
 logic   [31:0]  instruction_EX;
-logic   [31:0]  instruction_mem [63:0]; //4096 x 32
+logic   [31:0]  instruction_mem [4095:0]; //4096 x 32
 logic   [4: 0]  regdest_WB;
 logic   [31:0]  writedata_WB;
 logic   [31:0]  gpio_in_WB;
@@ -166,7 +166,7 @@ end
 
 //rs2 MUX
 always_comb begin
-    assign b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
+    b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
 end
 
 //regsel register 

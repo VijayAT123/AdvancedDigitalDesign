@@ -27,6 +27,9 @@ always_comb begin
         regwrite = 0;
         stall_F = 0;
         pc_src = 3'b000;
+        aluop = 4'b1101;
+        regsel = 2'b10;
+        alusrc = 1'b0;
     end
 
     else begin
@@ -96,15 +99,17 @@ always_comb begin
                 regsel = 2'b00;
                 regwrite = 1'b0;
             end
-            else
+            else begin
                 aluop = 4'b1101;
+                regsel = 2'b00;
+            end
         end
 
         //I-type insts
         else if (inst_type == 3'b001) begin
             alusrc = 1'b1;
             pc_src = 3'b000;
-           // stall_F = 0;
+            stall_F = 0;
             //addi
             if (funct3 == 3'b000)
                 aluop = 4'b0011;
@@ -126,8 +131,10 @@ always_comb begin
             //srli
             else if (funct3 == 3'b101 && funct7 == 7'b0000000)
                 aluop = 4'b1001;
-            else
+            else begin
                 aluop = 4'b1101;
+                regsel = 2'b10;
+            end
         end
 
         //U-type insts
@@ -142,13 +149,14 @@ always_comb begin
 
         //B-type insts
         else if (inst_type == 3'b100) begin
-            stall_F = 0;
-            alusrc = 0;
+            stall_F = 1'b0;
+            alusrc = 1'b0;
+            pc_src = 3'b000;
             //beq
             if (funct3 == 3'b000) begin
                 aluop = 4'b0100;
                 if(aluR == 32'b0) begin
-                    stall_F = 1;
+                    stall_F = 1'b1;
                     pc_src = 3'b001;
                 end
             end
@@ -156,7 +164,7 @@ always_comb begin
             else if (funct3 == 3'b001) begin
                 aluop = 4'b0100; 
                 if(aluR != 0) begin
-                     stall_F = 1;
+                     stall_F = 1'b1;
                      pc_src = 3'b001;
                 end
             end
@@ -164,7 +172,7 @@ always_comb begin
             else if (funct3 == 3'b101) begin
                 aluop = 4'b1100;
                 if(aluR == 32'b0) begin
-                    stall_F = 1;
+                    stall_F = 1'b1;
                     pc_src = 3'b001;
                 end
             end
@@ -172,7 +180,7 @@ always_comb begin
             else if (funct3 == 3'b111) begin
                 aluop = 4'b1110;
                 if(aluR == 32'b0) begin
-                    stall_F = 1;
+                    stall_F = 1'b1;
                     pc_src = 3'b001;
                 end
             end
@@ -180,7 +188,7 @@ always_comb begin
             else if (funct3 == 3'b100) begin
                 aluop = 4'b1100;
                 if(aluR == 32'b1 ) begin
-                    stall_F = 1;
+                    stall_F = 1'b1;
                     pc_src = 3'b001;
                 end
             end
@@ -188,13 +196,15 @@ always_comb begin
             else if (funct3 == 3'b110) begin
                 aluop = 4'b1110;
                 if(aluR == 32'b1) begin
-                    stall_F = 1;
+                    stall_F = 1'b1;
                     pc_src = 3'b001;
                 end
             end
-            
-            else
+            else begin
                 aluop = 4'b1101;
+                pc_src = 3'b0;
+                regsel = 2'b10;
+            end
         end
 
         //JAL
@@ -203,6 +213,8 @@ always_comb begin
             regwrite = 1;
             pc_src = 3'b010; 
             stall_F = 1;
+            aluop = 4'b1101;
+            alusrc = 1'b0;
         end
 
         //JALR
@@ -211,11 +223,16 @@ always_comb begin
             regwrite = 1;
             pc_src = 3'b011; 
             stall_F = 1;
+            aluop = 4'b1101;
+            alusrc = 1'b0;
         end
 
         else begin
             aluop = 4'b1101;
             alusrc = 1'b0;
+            stall_F = 0;
+            pc_src = 3'b000;
+            regsel = 2'b10;
         end
     end
 end
