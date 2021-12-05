@@ -26,6 +26,7 @@ always_comb begin
         gpio_we = 0;
         regwrite = 0;
         stall_F = 0;
+        pc_src = 3'b000;
     end
 
     else begin
@@ -141,12 +142,9 @@ always_comb begin
 
         //B-type insts
         else if (inst_type == 3'b100) begin
-            //TODO alusrc
-            //TODO regsel
-            //TODO regwrite
-            //pc_src = 3'b001;
-            //beq
             stall_F = 0;
+            alusrc = 0;
+            //beq
             if (funct3 == 3'b000) begin
                 aluop = 4'b0100;
                 if(aluR == 32'b0) begin
@@ -165,7 +163,6 @@ always_comb begin
             //bge
             else if (funct3 == 3'b101) begin
                 aluop = 4'b1100;
-                stall_F = 1;
                 if(aluR == 32'b0) begin
                     stall_F = 1;
                     pc_src = 3'b001;
@@ -174,7 +171,6 @@ always_comb begin
             //bgeu
             else if (funct3 == 3'b111) begin
                 aluop = 4'b1110;
-                stall_F = 1;
                 if(aluR == 32'b0) begin
                     stall_F = 1;
                     pc_src = 3'b001;
@@ -183,7 +179,6 @@ always_comb begin
             //blt
             else if (funct3 == 3'b100) begin
                 aluop = 4'b1100;
-                stall_F = 1;
                 if(aluR == 32'b1 ) begin
                     stall_F = 1;
                     pc_src = 3'b001;
@@ -192,7 +187,6 @@ always_comb begin
             //bltu
             else if (funct3 == 3'b110) begin
                 aluop = 4'b1110;
-                stall_F = 1;
                 if(aluR == 32'b1) begin
                     stall_F = 1;
                     pc_src = 3'b001;
@@ -205,17 +199,17 @@ always_comb begin
 
         //JAL
         else if (inst_type == 3'b101) begin
-            pc_src = 2'b10;
-            //TODO does regsel need to select for JAL 
             regsel = 2'b11;
+            regwrite = 1;
+            pc_src = 3'b010; 
             stall_F = 1;
         end
 
         //JALR
         else if (inst_type == 3'b110) begin
-            pc_src = 2'b11;
-            //TODO figure out writing PC_F to x1 
             regsel = 2'b11;
+            regwrite = 1;
+            pc_src = 3'b011; 
             stall_F = 1;
         end
 

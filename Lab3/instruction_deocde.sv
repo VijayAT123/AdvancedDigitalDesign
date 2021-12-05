@@ -46,7 +46,7 @@ module instruction_decode (
     assign offsetJ = {inst[31], inst[19:12], inst[20], inst[30:21], 1'b0};  
     assign jal_addr = prog_counter_EX + offsetJ[13:2];
     assign offsetJR = inst[31:20];
-    assign jalr_addr = readdata1_EX[13:2] + {{2{offsetJR[11]}}, offsetJR[11:2]};
+    assign jalr_addr = readdata1_EX[11:0] + {/*{2{offsetJR[11]}}, */offsetJR[11:0]};
 
     always_comb begin
         if (opcode == 7'b0110011) 

@@ -127,18 +127,20 @@ end
 always_ff @(posedge clk, posedge reset) begin
     if (reset) begin
         instruction_EX <= 32'b0;
-        prog_counter_F <= 32'b0;
+        prog_counter_F <= 12'b0;
     end
     else begin
         //PC MUX with pc_src_EX as selector
-        if(pc_src_EX == 000) 
+        if(pc_src_EX == 3'b000) 
             prog_counter_F <= prog_counter_F + 1'b1;
-        else if (pc_src_EX == 001)
+        else if (pc_src_EX == 3'b001)
             prog_counter_F <= branch_addr_EX;
-        else if (pc_src_EX == 010)
+        else if (pc_src_EX == 3'b010)
             prog_counter_F <= jal_addr_EX;
-        else if (pc_src_EX == 011)
+        else if (pc_src_EX == 3'b011)
             prog_counter_F <= jalr_addr_EX;
+        else if (pc_src_EX == 3'b100)
+            prog_counter_F <= prog_counter_F;
         else
             prog_counter_F <= 1'b0;
         instruction_EX <= instruction_mem[prog_counter_F];
@@ -157,14 +159,15 @@ always_comb begin
     else if(regsel_WB == 2'b10)
         writedata_WB <= r_WB;
     else if(regsel_WB == 2'b11)
-        writedata_WB = prog_counter_F;
+        writedata_WB = prog_counter_EX;
     else 
         writedata_WB <= 1'b0;
 end
 
 //rs2 MUX
-always_comb 
-    b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
+always_comb begin
+    assign b_EX = alusrc_EX?{{20{imm12_EX[11]}}, imm12_EX}:readdata2_EX; //sign extension; add 20 leading bits (bit 31 is sign bit)
+end
 
 //regsel register 
 always_ff @ (posedge clk)
