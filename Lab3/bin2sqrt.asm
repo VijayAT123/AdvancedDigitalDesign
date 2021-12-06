@@ -40,7 +40,7 @@ bin2dec:     mv      a0, s1                  #move guess into a0 to use with bin
 	        #csrrw	s0, 0xf00, zero		    #read in from SW register (0xf00) and write to s0
             mv      s0, a0                  #replace switch input with guess
             
-            mulh    t3, s0, t2              #multiply guess by 10E5 and store lower 32 bits in t3
+            mul    t3, s0, t2              #multiply guess by 10E5 and store lower 32 bits in t3
             mulhu   t4, s0, t2              #multiply guess by 10E5 and store upper 32 bits in t4
             srli    t3, t3, 14              #shift lower 32 bits right by 14 (0,32)
             slli    t4, t4, 18              #shift upper 32 bits left by 18 (32,0)
