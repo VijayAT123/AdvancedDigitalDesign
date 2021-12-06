@@ -17,13 +17,15 @@ module control_unit (
     output 	logic	[0:0]   regwrite,
     output 	logic	[0:0]   gpio_we,
     output  logic   [2:0]   pc_src,
-    output  logic           stall_F
+    output  logic           stall_F,
+    output  logic           b_j_flag
 );
 
 always_comb begin
 
     if (stall_EX) begin
         gpio_we = 0;
+        b_j_flag = 0;
         regwrite = 0;
         stall_F = 0;
         pc_src = 3'b000;
@@ -36,6 +38,7 @@ always_comb begin
         regwrite = 1'b1;     //except for csrrw HEX
         gpio_we = 1'b0;      //except for csrrw HEX
         regsel = 2'b10;      //exceot fir csrrw, lui, JAL, and JALR
+        b_j_flag = 0;       //except for resolved branch and J-types
 
         //R-Type insts
         if(inst_type == 3'b000) begin 
@@ -157,6 +160,7 @@ always_comb begin
             if (funct3 == 3'b000) begin
                 aluop = 4'b0100;
                 if(aluR == 32'b0) begin
+                    b_j_flag = 1;
                     regwrite = 1'b1;
                     stall_F = 1'b1;
                     pc_src = 3'b001;
@@ -166,6 +170,7 @@ always_comb begin
             else if (funct3 == 3'b001) begin
                 aluop = 4'b0100; 
                 if(aluR != 0) begin
+                    b_j_flag = 1;
                     regwrite = 1'b1;
                      stall_F = 1'b1;
                      pc_src = 3'b001;
@@ -175,6 +180,7 @@ always_comb begin
             else if (funct3 == 3'b101) begin
                 aluop = 4'b1100;
                 if(aluR == 32'b0) begin
+                    b_j_flag = 1;
                     regwrite = 1'b1;
                     stall_F = 1'b1;
                     pc_src = 3'b001;
@@ -184,6 +190,7 @@ always_comb begin
             else if (funct3 == 3'b111) begin
                 aluop = 4'b1110;
                 if(aluR == 32'b0) begin
+                    b_j_flag = 1;
                     regwrite = 1'b1;
                     stall_F = 1'b1;
                     pc_src = 3'b001;
@@ -193,6 +200,7 @@ always_comb begin
             else if (funct3 == 3'b100) begin
                 aluop = 4'b1100;
                 if(aluR == 32'b1 ) begin
+                    b_j_flag = 1;
                     regwrite = 1'b1;
                     stall_F = 1'b1;
                     pc_src = 3'b001;
@@ -202,6 +210,7 @@ always_comb begin
             else if (funct3 == 3'b110) begin
                 aluop = 4'b1110;
                 if(aluR == 32'b1) begin
+                    b_j_flag = 1;
                     regwrite = 1'b1;
                     stall_F = 1'b1;
                     pc_src = 3'b001;
@@ -218,6 +227,7 @@ always_comb begin
         //JAL
         else if (inst_type == 3'b101) begin
             regsel = 2'b11;
+            b_j_flag = 1;
             regwrite = 1;
             pc_src = 3'b010; 
             stall_F = 1;
@@ -228,6 +238,7 @@ always_comb begin
         //JALR
         else if (inst_type == 3'b110) begin
             regsel = 2'b11;
+            b_j_flag = 1;
             regwrite = 1;
             pc_src = 3'b011; 
             stall_F = 1;
@@ -238,6 +249,7 @@ always_comb begin
         else begin
             aluop = 4'b1101;
             alusrc = 1'b0;
+            b_j_flag = 1;
             stall_F = 0;
             pc_src = 3'b000;
             regsel = 2'b10;

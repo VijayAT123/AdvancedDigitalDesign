@@ -4,7 +4,13 @@ module cpu (
     input   logic   [0: 0]  clk,
     input   logic   [0: 0]  reset,
     input   logic   [31:0]  gpio_in,  //switches; upper 14 bits should be 0
-    output  logic   [31:0]  gpio_out
+    output  logic   [31:0]  gpio_out,
+    output  logic   [31:0]  instruction,
+    output  logic           bj,
+    output  logic   [2: 0]  funct3,
+    output  logic   [0: 0]  stall,
+    output  logic	[31:0]	r_EX,
+    output  logic   [0: 0]  regwrite_EX
 );
 
 
@@ -21,10 +27,11 @@ logic   [31:0]  gpio_in_WB;
 
 ///////DECODER//////
 logic   [6: 0]  funct7_EX;
+logic   [2: 0]  funct3_EX;
+assign funct3 = funct3_EX;
 logic   [4: 0]  rs1_EX;
 logic   [4: 0]  rs2_EX;
 logic   [4: 0]  rd_EX;
-logic   [2: 0]  funct3_EX;
 logic   [11:0]  imm12_EX;
 logic   [19:0]  imm20_EX;
 logic   [19:0]  imm20_WB;
@@ -40,10 +47,10 @@ logic   [3: 0]  aluop;
 logic   [0: 0]  alusrc_EX;
 logic   [1: 0]  regsel_EX;
 logic   [1: 0]  regsel_WB;
-logic   [0: 0]  regwrite_EX;
 logic   [0: 0]  gpio_we; 
-logic   [0: 0]  stall_EX;
 logic   [0: 0]  stall_F;
+assign stall = stall_F;
+logic   [0: 0]  stall_EX;
 logic   [2: 0]  pc_src_EX;
 
 
@@ -56,7 +63,6 @@ logic   [31:0]   readdata2_EX;
 ///////ALU///////
 logic   [31:0]   a_EX;
 logic   [31:0]   b_EX;
-logic	[31:0]	 r_EX;
 logic	[31:0]	 r_WB;
 logic            zero;
 assign  a_EX =   readdata1_EX;
@@ -97,7 +103,8 @@ control_unit cu (
     .regsel     (regsel_EX),
     .regwrite   (regwrite_EX),
     .gpio_we    (gpio_we),
-    .pc_src     (pc_src_EX)
+    .pc_src     (pc_src_EX),
+    .b_j_flag   (bj)
 );
 
 regfile register (
@@ -163,6 +170,8 @@ always_comb begin
     else 
         writedata_WB <= 1'b0;
 end
+
+
 
 //rs2 MUX
 always_comb begin

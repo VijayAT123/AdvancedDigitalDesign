@@ -5,13 +5,19 @@
 
 module simtop();
 
-	logic	clock;
-	logic	reset;
+	logic			clock;
+	logic			reset;
 	logic	[31:0]	HEX;
 	logic	[6: 0]	HEX0,HEX1,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7;
 	logic	[17:0]	SW;
     logic	[31:0]	gpio_out;
+	logic	[31:0]	instruction;
 	assign	HEX = 	gpio_out;
+	logic			bj_flag;
+	logic			write;
+	logic			stall;
+	logic	[2:0]	funct3;
+	logic	[31:0]	aluR;
 
 
 	// top dut
@@ -44,10 +50,15 @@ module simtop();
 	//);
 
    cpu cpu (
-		.clk(clock),
-		.reset(reset),
-		.gpio_in({14'b0, SW}),
-		.gpio_out(gpio_out)
+		.clk		(clock),
+		.reset		(reset),
+		.gpio_in	({14'b0, SW}),
+		.gpio_out	(gpio_out),
+		.bj			(bj_flag),
+		.regwrite_EX(write),
+		.stall		(stall),
+		.funct3		(funct3),
+		.r_EX		(aluR)
     );
 
 hexdriver hex7(.val(gpio_out[ 3: 0]), .HEX(HEX7[6:0])); 
@@ -71,18 +82,34 @@ initial begin
 
 	//reset = 1; #20; reset = 0;
 
-	// for (int i = 1; i <= 18'b111111111111111111; ++i) begin
-	// 	SW <= i;
-	// 	#980;
-	// 	reset = 1; # 20;
-	// 	reset = 0;
-	// end
+	for (int i = 18'b1; i <= 18'b111111111111111111; i+=18'b1000) begin
+		SW <= i;
+		#4000;
+		reset = 1; # 20;
+		reset = 0;
+	end
 end
 
-//testing for lab4 needs to make sure insts are executed in:
-//0, 1, 2, 3, 4, 8, 9, 10, 9, 10, 11, 12, 13
-
 always_comb begin
+	//checks table from slide 72
+	if (aluR == 0) begin
+		if(bj_flag && (funct3 == 3'b001 /*bne*/ || funct3 == 3'b100 /*blt*/ || funct3 == 3'b110 /*bltu*/))
+			$error ("BNE, BLT, and BLTU should not branch if aluR = 0");
+	end
+	if (aluR == 1) begin
+		if (bj_flag && (funct3 == 3'b00 /*beq*/ || funct3 == 3'b101 /*bge*/ || funct3 == 3'b111 /*bgeu*/))
+				$error ("BEQ, BGE, and BGEU should not branch when aluR = 1");
+	end
+	//checks if regwrite = 1 when a branch is taken to write RA
+	if (bj_flag) begin
+		if(write != 1) begin
+			$error("A branch instruction is executing and resolved, but can't write to it's rd.");
+		end
+		if(stall!=1'b1) begin
+			$error("A branch instruction is being executed and was resolved, but a stall wasn't asserted, and stall_EX will be 0.  
+			The next instruction will likely modify a register, cause an unwanted branch/jump, or derail pc_src from it's expected value.");
+		end
+	end
 	////SW <= 18'b0; #1000; //0
 	if ((SW ==  18'b0) && (((HEX7!= 7'b1000000) || (HEX6 != 7'b100000) || (HEX5!= 7'b1000000) || (HEX4!= 7'b1000000)|| (HEX3!= 7'b1000000)|| (HEX2!= 7'b1000000) || (HEX1!= 7'b1000000) || (HEX0!= 7'b1000000)))) begin
 	$error("%d HEX7should display a 7'b1000000, HEX6 should display a 7'b1000000,HEX5 should display a 7'b1000000, HEX4 should display a 7'b1000000, HEX3 should display a 7'b1000000, HEX2 should display a 7'b1000000, HEX1 should display a 7'b1000000, HEX0 should display a 7'b1000000", SW);
