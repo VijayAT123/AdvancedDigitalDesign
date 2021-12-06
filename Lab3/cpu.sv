@@ -121,7 +121,7 @@ alu alu (
 );
 
 initial begin
-    $readmemh("test4.txt", instruction_mem); //readmemh always in initial
+    $readmemh("bin2sqrt.txt", instruction_mem); //readmemh always in initial
 end
 
 always_ff @(posedge clk, posedge reset) begin
