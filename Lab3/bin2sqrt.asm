@@ -1,6 +1,8 @@
-.text       li		s5, 429496730		    #const for 0.1 into x21 (s5) (32,32)
-	        li		s6, 10
+.text       
+	    li      s5, 429496730		    #const for 0.1 into x21 (s5) (32,32)
+	    li      s6, 10
             li      t2, 100000               #const for multiplying guess by 100000
+            #addi    s0, zero, 100
             csrrw   s0, 0xf00, zero         #read in switches' value into s0
 
             slli    s0, s0, 14              #multiples input by 100,000
