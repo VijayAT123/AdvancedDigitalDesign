@@ -1,5 +1,5 @@
 # Overview
-This three-stage RISC-V CPU utilizes different components manifested as different SystemVerilog modules.  These components include an instruction decoder, a control unit, a register file, an ALU, a hex-display driver, and various registers and MUXs within the CPU module.  
+This three-stage RISC-V CPU utilizes different components manifested as different SystemVerilog modules.  These components include an instruction decoder, a control unit, a register file, an ALU, a hex-display driver, and various registers and MUXs within the CPU module.  This CPU can execute `R`, `I`, `U`, `B`, `csrrw`, `JAL`, and `JALR` type instructions.
 
 ## Instruction Decoder
 The instruction decoder takes in a 32-bit wide RISC-V instruction, which comes from the instruction memory initialized with readmemh in an initial begin in the CPU module. The instruction decoder outputs various instruction fields, including the instruction type (determined by opcode), funct7, registers, immediate 12 and 20, and funct3, which passed to the control unit.
